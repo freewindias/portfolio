@@ -4,6 +4,7 @@ import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
 import ReactLenis from "lenis/react";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default function RootLayout({
               <ScrollToTop />
               {children}
             </ConvexClientProvider>
+            <Toaster />
           </body>
         </ReactLenis>
       </html>

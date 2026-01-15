@@ -168,6 +168,7 @@ export default function EducationForm({ initialData, mode }: EducationFormProps)
             accept="image/*"
             onChange={handleLogoUpload}
             disabled={logoUploading}
+            className="cursor-pointer"
           />
           <div className="text-xs text-muted-foreground">
              {logoUploading ? "Uploading..." : "Upload a logo image"}
