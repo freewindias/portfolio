@@ -44,4 +44,18 @@ export default defineSchema({
     ),
     isCurrentEmployer: v.optional(v.boolean()),
   }),
+  projects: defineTable({
+    title: v.string(),
+    slug: v.string(), // URL-friendly identifier
+    year: v.string(),
+    category: v.string(),
+    client: v.string(),
+    description: v.string(), // Short description for cards
+    overview: v.string(), // Detailed project overview
+    heroImage: v.string(), // Main project image
+    heroImageCaption: v.optional(v.string()),
+    galleryImages: v.optional(v.array(v.string())),
+    featured: v.optional(v.boolean()), // Show in featured work section
+    order: v.optional(v.number()), // Display order
+  }).index("by_slug", ["slug"]),
 });

@@ -13,6 +13,8 @@ import type * as education from "../education.js";
 import type * as experience from "../experience.js";
 import type * as http from "../http.js";
 import type * as myFunctions from "../myFunctions.js";
+import type * as projects from "../projects.js";
+import type * as seedProjects from "../seedProjects.js";
 import type * as users from "../users.js";
 
 import type {
@@ -27,6 +29,8 @@ declare const fullApi: ApiFromModules<{
   experience: typeof experience;
   http: typeof http;
   myFunctions: typeof myFunctions;
+  projects: typeof projects;
+  seedProjects: typeof seedProjects;
   users: typeof users;
 }>;
 

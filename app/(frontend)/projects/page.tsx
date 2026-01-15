@@ -3,43 +3,14 @@ import React from 'react'
 import VerticalCutReveal from '@/components/fancy/vertical-cut-reveal'
 import { audiowide } from '@/font'
 import ProjectCard from '../_components/project-card'
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { api } from '@/convex/_generated/api';
+import { fetchQuery } from 'convex/nextjs';
 
-export default function page() {
-  const projects = [
-    {
-      title: "Freewin Portfolio",
-      category: "Portfolio Website",
-      image: "/logo.jpeg",
-    },
-    {
-      title: "Rodias",
-      category: "SAAS Website",
-      image: "/1.jpeg",
-    },
-    {
-      title: "I-fineart",
-      category: "Art Portfolio Website",
-      image: "/2.jpg",
-    },
-    {
-      title: "Freewin Portfolio",
-      category: "Portfolio Website",
-      image: "/logo.jpeg",
-    },
-    {
-      title: "Rodias",
-      category: "SAAS Website",
-      image: "/1.jpeg",
-    },
-    {
-      title: "I-fineart",
-      category: "Art Portfolio Website",
-      image: "/2.jpg",
-    },
-  ];
+export default async function ProjectsPage() {
+  const projects = await fetchQuery(api.projects.list, {});
 
   return (
     <section className="min-h-screen px-4 pb-20">
@@ -61,8 +32,16 @@ export default function page() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project, index) => (
-          <ProjectCard key={index} project={project} />
+        {projects.map((project) => (
+          <ProjectCard 
+            key={project._id} 
+            project={{
+              title: project.title,
+              category: project.category,
+              image: project.heroImage,
+              slug: project.slug,
+            }} 
+          />
         ))}
       </div>
 

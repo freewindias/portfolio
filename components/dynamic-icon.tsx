@@ -14,15 +14,34 @@ interface DynamicIconProps extends React.ComponentProps<"svg"> {
 const iconCache: Record<string, React.ComponentType | null> = {};
 
 export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props }) => {
-  const [IconComponent, setIconComponent] = useState<React.ComponentType | null>(
-    iconCache[name] || null
-  );
+  // Validate icon name - return placeholder if invalid
+  if (!name || name.trim().length === 0) {
+    return (
+      <span className={`inline-block bg-muted/20 rounded-md ${className}`} style={{ width: '1em', height: '1em' }} />
+    );
+  }
+
+  const [IconComponent, setIconComponent] = useState<React.ComponentType | null>(() => {
+    // Only use cached value if it's a valid component, not null
+    const cached = iconCache[name];
+    return (cached && typeof cached === 'function') ? cached : null;
+  });
   
   // Extract the prefix (e.g. "Fa" from "FaReact")
   const prefix = name.substring(0, 2).toLowerCase();
 
   useEffect(() => {
-    if (!name || iconCache[name]) return;
+    // Skip if no name or if we already have a valid cached component
+    if (!name) return;
+    
+    const cached = iconCache[name];
+    if (cached !== undefined) {
+      // If we have a cached value (even if null), use it
+      if (cached && typeof cached === 'function') {
+        setIconComponent(() => cached);
+      }
+      return;
+    }
 
     let isMounted = true;
 
@@ -92,18 +111,27 @@ export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props })
           default:
             // Fallback or try to guess? For now, no generic fallback to avoid huge bundles
             console.warn(`Icon prefix '${prefix}' for '${name}' not explicitly handled.`);
+            iconCache[name] = null;
             break;
         }
 
         if (iconModule && isMounted) {
           const Component = (iconModule as any)[name];
-          if (Component) {
+          if (Component && typeof Component === 'function') {
             iconCache[name] = Component;
             setIconComponent(() => Component);
+          } else {
+            console.warn(`Icon '${name}' not found in module or is not a valid component`);
+            iconCache[name] = null;
+            setIconComponent(null);
           }
         }
       } catch (error) {
         console.error(`Failed to load icon: ${name}`, error);
+        iconCache[name] = null;
+        if (isMounted) {
+          setIconComponent(null);
+        }
       }
     };
 
@@ -114,10 +142,9 @@ export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props })
     };
   }, [name, prefix]);
 
-  if (!IconComponent) {
+  // Always check if IconComponent is valid before rendering
+  if (!IconComponent || typeof IconComponent !== 'function') {
     // Return a placeholder or null while loading/if not found
-    // If the name is "business", "education", etc from the old hardcoded list, we might want a legacy map.
-    // For now, let's assume valid react-icons names.
     return (
         <span className={`inline-block bg-muted/20 animate-pulse rounded-md ${className}`} style={{ width: '1em', height: '1em' }} />
     );

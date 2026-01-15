@@ -32,10 +32,6 @@ const data = {
       title: "Update Frontend Data",
       items: [
         {
-          title: "Hero Section",
-          url: "/dashboard/udp/hero",
-        },
-        {
           title: "Experience Section",
           url: "/dashboard/udp/experience",
         },
@@ -46,10 +42,6 @@ const data = {
         {
           title: "Projects Section",
           url: "/dashboard/udp/projects",
-        },
-        {
-          title: "Contact Section",
-          url: "/dashboard/udp/contact",
         },
       ],
     },
