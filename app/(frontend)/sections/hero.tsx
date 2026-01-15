@@ -169,7 +169,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 0.5 }}
         >
-          <Link href="https://github.com" target="_blank" className="border border-black px-5 py-2 rounded-lg inline-block">
+          <Link href="https://github.com/freewindias" target="_blank" className="border border-black px-5 py-2 rounded-lg inline-block">
             <Player ref={githubRef} icon={Github} size={24}  />
           </Link>
         </motion.div>

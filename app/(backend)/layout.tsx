@@ -1,8 +1,14 @@
 import React from 'react'
+import { Metadata } from 'next'
 import { AppSidebar } from "@/app/(backend)/_components/app-sidebar"
 import { SiteHeader } from "@/app/(backend)/_components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import "./backend.css"
+
+export const metadata: Metadata = {
+  title: "Freewin Dias | Backend",
+  description: "Backend management for the portfolio.",
+};
 
 export default function BackendLayout({ children }: { children: React.ReactNode }) {
   return (

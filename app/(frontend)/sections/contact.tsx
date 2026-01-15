@@ -34,10 +34,10 @@ export default function Contact() {
   }, [isInView]);
 
   const contactItems = [
-    { icon: Map, ref: mapRef, text: "Vancouver, BC", delay: 0.6 },
-    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.7 },
-    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.9 },
-    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com", delay: 1.1 },
+    { icon: Map, ref: mapRef, text: "Vancouver, BC", delay: 0.4 },
+    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.5 },
+    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.6 },
+    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.7 },
   ];
 
   return (
@@ -123,7 +123,7 @@ export default function Contact() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: 1.8, duration: 0.5 }}
+              transition={{ delay: 1.5, duration: 0.5 }}
             >
               <Link href="/resume.pdf" target="_blank">
                 <button className="border border-black px-8 py-3 rounded-lg cursor-pointer">
@@ -131,13 +131,13 @@ export default function Contact() {
                     <VerticalCutReveal
                       splitBy="characters"
                       staggerDuration={0.025}
-                      staggerDelay={1.1}
+                      staggerDelay={0.8}
                       staggerFrom="first"
                       transition={{
                         type: "spring",
                         stiffness: 200,
                         damping: 21,
-                        delay: 1.1
+                        delay: 0.8
                       }}
                       wordLevelClassName="text-lg md:text-xl font-medium"
                     >
