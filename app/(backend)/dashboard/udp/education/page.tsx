@@ -39,6 +39,7 @@ export default function EducationAdminPage() {
             <TableRow>
               <TableHead>Institution</TableHead>
               <TableHead>Degrees</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -50,6 +51,9 @@ export default function EducationAdminPage() {
                 </TableCell>
                 <TableCell>
                   {education.degrees.map((d) => d.degree).join(", ")}
+                </TableCell>
+                <TableCell>
+                  {education.isCurrentEmployer ? "Current" : "-"}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">

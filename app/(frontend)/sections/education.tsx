@@ -25,7 +25,7 @@ export default function Education() {
           // Default icon for education if not provided in backend (though backend schema doesn't have icon for degrees yet, keeping it safe)
           icon: "education", 
         })),
-        isCurrentEmployer: false, // Education usually isn't "current employer" in the same sense, or we can add this field to backend later if needed
+        isCurrentEmployer: edu.isCurrentEmployer || false,
       }))
     : [];
 

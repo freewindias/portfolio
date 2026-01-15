@@ -42,5 +42,6 @@ export default defineSchema({
         isExpanded: v.optional(v.boolean()),
       })
     ),
+    isCurrentEmployer: v.optional(v.boolean()),
   }),
 });

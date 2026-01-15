@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import RichTextEditor from "@/components/ui/rich-text-editor";
 import { Id } from "@/convex/_generated/dataModel";
@@ -28,6 +29,7 @@ type EducationData = {
   id: string;
   institutionName: string;
   institutionLogo: string;
+  isCurrentEmployer: boolean;
   degrees: Degree[];
 };
 
@@ -40,11 +42,14 @@ export default function EducationForm({ initialData, mode }: EducationFormProps)
   const router = useRouter();
   const createMutation = useMutation(api.education.create);
   const updateMutation = useMutation(api.education.update);
+  const generateUploadUrl = useMutation(api.education.generateUploadUrl);
+  const [logoUploading, setLogoUploading] = useState(false);
 
   const [formData, setFormData] = useState<EducationData>({
     id: initialData?.id || generateId(),
     institutionName: initialData?.institutionName || "",
     institutionLogo: initialData?.institutionLogo || "",
+    isCurrentEmployer: initialData?.isCurrentEmployer || false,
     degrees: initialData?.degrees.map(d => ({
         ...d,
         skills: d.skills || [],
@@ -59,6 +64,28 @@ export default function EducationForm({ initialData, mode }: EducationFormProps)
       },
     ],
   });
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setLogoUploading(true);
+    try {
+      const postUrl = await generateUploadUrl();
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      const { storageId } = await result.json();
+      setFormData({ ...formData, institutionLogo: storageId });
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setLogoUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +103,7 @@ export default function EducationForm({ initialData, mode }: EducationFormProps)
           id: initialData._id,
           institutionName: formData.institutionName,
           institutionLogo: formData.institutionLogo,
+          isCurrentEmployer: formData.isCurrentEmployer,
           degrees: formData.degrees.map(d => ({
             ...d,
             skills: d.skills || [],
@@ -134,13 +162,34 @@ export default function EducationForm({ initialData, mode }: EducationFormProps)
         </div>
         
         <div className="grid gap-2">
-          <Label htmlFor="institutionLogo">Logo URL</Label>
+          <Label htmlFor="institutionLogo">Logo</Label>
           <Input
-            id="institutionLogo"
+            type="file"
+            accept="image/*"
+            onChange={handleLogoUpload}
+            disabled={logoUploading}
+          />
+          <div className="text-xs text-muted-foreground">
+             {logoUploading ? "Uploading..." : "Upload a logo image"}
+          </div>
+          <Label htmlFor="institutionLogoUrl" className="mt-2 text-xs">Or use URL</Label>
+          <Input
+            id="institutionLogoUrl"
             value={formData.institutionLogo}
             onChange={(e) => setFormData({ ...formData, institutionLogo: e.target.value })}
             placeholder="https://..."
           />
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="isCurrentEmployer"
+            checked={formData.isCurrentEmployer}
+            onCheckedChange={(checked) => 
+              setFormData({ ...formData, isCurrentEmployer: checked as boolean })
+            }
+          />
+          <Label htmlFor="isCurrentEmployer">Current Institution</Label>
         </div>
       </div>
 

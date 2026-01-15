@@ -1,10 +1,26 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+export const generateUploadUrl = mutation(async (ctx) => {
+  return await ctx.storage.generateUploadUrl();
+});
+
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("educations").collect();
+    const educations = await ctx.db.query("educations").collect();
+    return await Promise.all(
+      educations.map(async (edu) => {
+        let logoUrl = edu.institutionLogo;
+        if (edu.institutionLogo && !edu.institutionLogo.startsWith("http")) {
+          logoUrl = (await ctx.storage.getUrl(edu.institutionLogo)) || undefined;
+        }
+        return {
+          ...edu,
+          institutionLogo: logoUrl,
+        };
+      })
+    );
   },
 });
 
@@ -34,6 +50,7 @@ export const seed = mutation({
           isExpanded: true,
         },
       ],
+      isCurrentEmployer: true,
     };
 
     await ctx.db.insert("educations", educationData);
@@ -57,6 +74,7 @@ export const create = mutation({
         isExpanded: v.optional(v.boolean()),
       })
     ),
+    isCurrentEmployer: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     // Check if ID already exists
@@ -89,6 +107,7 @@ export const update = mutation({
         isExpanded: v.optional(v.boolean()),
       })
     ),
+    isCurrentEmployer: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;

@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import RichTextEditor from "@/components/ui/rich-text-editor";
 import { Id } from "@/convex/_generated/dataModel";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 
 // Helper for generating IDs
@@ -254,11 +255,17 @@ export default function ExperienceForm({ initialData, mode }: ExperienceFormProp
 
             <div className="grid gap-2">
               <Label>Icon (for Icons visit React Icons Website)</Label>
-              <Input
-                value={position.icon}
-                onChange={(e) => updatePosition(index, "icon", e.target.value)}
-                placeholder="e.g. FaReact, SiTypescript, MdWork"
-              />
+              <div className="flex items-center gap-2">
+                <Input
+                  value={position.icon}
+                  onChange={(e) => updatePosition(index, "icon", e.target.value)}
+                  placeholder="e.g. FaReact, SiTypescript, MdWork"
+                  className="flex-1"
+                />
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border bg-muted">
+                    <DynamicIcon name={position.icon || "MdBusinessCenter"} className="size-5" />
+                </div>
+              </div>
             </div>
 
             <div className="grid gap-2">

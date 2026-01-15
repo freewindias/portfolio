@@ -158,7 +158,7 @@ export function ExperiencePositionItem({
               className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
               aria-hidden
             >
-              {/* <DynamicIcon name={iconName} className="size-4" /> */}
+              <DynamicIcon name={iconName} className="size-4" />
             </div>
 
             <h4 className="flex-1 text-base font-medium text-balance text-foreground">

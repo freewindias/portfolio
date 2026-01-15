@@ -25,21 +25,21 @@ export default function Hero() {
   useEffect(() => {
     setTimeout(() => {
       playerRef.current?.playFromBeginning();
-    }, 2000);
+    }, 900);
   }, []);
 
   const linkedinRef = useRef<Player>(null);
   useEffect(() => {
     setTimeout(() => {
       linkedinRef.current?.playFromBeginning();
-    }, 2800);
+    }, 1200);
   }, []);
 
   const githubRef = useRef<Player>(null);
   useEffect(() => {
     setTimeout(() => {
       githubRef.current?.playFromBeginning();
-    }, 3000);
+    }, 1300);
   }, []);
 
   const mailRef = useRef<Player>(null);
@@ -55,7 +55,7 @@ export default function Hero() {
         <VerticalCutReveal
           splitBy="characters"
           staggerDuration={0.025}
-          staggerDelay={1.2}
+          staggerDelay={0.5}
           staggerFrom="first"
           transition={{
             type: "spring",
@@ -69,7 +69,7 @@ export default function Hero() {
         <VerticalCutReveal
           splitBy="characters"
           staggerDuration={0.025}
-          staggerDelay={1.4}
+          staggerDelay={0.6}
           staggerFrom="first"
           transition={{
             type: "spring",
@@ -83,7 +83,7 @@ export default function Hero() {
         <VerticalCutReveal
           splitBy="characters"
           staggerDuration={0.025}
-          staggerDelay={1.6}
+          staggerDelay={0.7}
           staggerFrom="first"
           transition={{
             type: "spring",
@@ -98,8 +98,8 @@ export default function Hero() {
       <div className='mt-4 flex items-end'>
         <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.025}
-          staggerDelay={1.8}
+          staggerDuration={0.01}
+          staggerDelay={0.8}
           staggerFrom="first"
           transition={{
             type: "spring",
@@ -117,8 +117,8 @@ export default function Hero() {
       <div className='mt-1 text-[19px] max-w-[975px]'>
         <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.005}
-          staggerDelay={2.0}
+          staggerDuration={0.001}
+          staggerDelay={1.0}
           staggerFrom="first"
           transition={{
             type: "spring",
@@ -134,14 +134,14 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.3, duration: 0.5 }}
+          transition={{ delay: 1.3, duration: 0.5 }}
         >
           <Link href="/resume.pdf" target="_blank">
             <button className="border border-black px-5 py-2 rounded-lg cursor-pointer">
               <VerticalCutReveal
                 splitBy="characters"
-                staggerDuration={0.025}
-                staggerDelay={2.3}
+                staggerDuration={0.01}
+                staggerDelay={1.3}
                 staggerFrom="first"
                 transition={{
                   type: "spring",
@@ -158,7 +158,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.5, duration: 0.5 }}
+          transition={{ delay: 1.4, duration: 0.5 }}
         >
           <Link href="https://www.linkedin.com/in/freewindias/" target="_blank" className="border border-black px-5 py-2 rounded-lg inline-block">
             <Player ref={linkedinRef} icon={Linkedin} size={24}  />
@@ -167,7 +167,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.7, duration: 0.5 }}
+          transition={{ delay: 1.5, duration: 0.5 }}
         >
           <Link href="https://github.com" target="_blank" className="border border-black px-5 py-2 rounded-lg inline-block">
             <Player ref={githubRef} icon={Github} size={24}  />
