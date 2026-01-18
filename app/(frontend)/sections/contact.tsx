@@ -35,9 +35,9 @@ export default function Contact() {
 
   const contactItems = [
     { icon: Map, ref: mapRef, text: "Vancouver, BC", delay: 0.1 },
-    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.3 },
-    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.4 },
-    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.5 },
+    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.2 },
+    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.3 },
+    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.4 },
   ];
 
   return (
