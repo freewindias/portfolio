@@ -64,7 +64,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Hero Image */}
         <div className="mb-16">
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg">
+          <div className="relative aspect-16/10 w-full overflow-hidden rounded-lg">
             <Image
               src={project.heroImage}
               alt={project.title}
@@ -103,7 +103,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {project.galleryImages && project.galleryImages.length > 0 && (
           <div className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-6">
             {project.galleryImages.map((image, index) => (
-              <div key={index} className="relative aspect-[4/3] overflow-hidden rounded-lg">
+              <div key={index} className="relative aspect-4/3 overflow-hidden rounded-lg">
                 <Image
                   src={image}
                   alt={`${project.title} - Image ${index + 1}`}

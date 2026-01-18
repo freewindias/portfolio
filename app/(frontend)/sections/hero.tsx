@@ -8,7 +8,6 @@ import { Player } from "@lordicon/react"
 import { motion } from "motion/react";
 import Linkedin from "@/public/heroIcons/linkedin.json"
 import Github from "@/public/heroIcons/github.json"
-import Mail from "@/public/heroIcons/mail.json"
 import Link from "next/link"
 
 
@@ -40,13 +39,6 @@ export default function Hero() {
     setTimeout(() => {
       githubRef.current?.playFromBeginning();
     }, 1300);
-  }, []);
-
-  const mailRef = useRef<Player>(null);
-  useEffect(() => {
-    setTimeout(() => {
-      mailRef.current?.playFromBeginning();
-    }, 2600);
   }, []); 
 
   return (

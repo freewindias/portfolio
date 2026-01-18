@@ -1,13 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PlusIcon, TrashIcon } from "lucide-react";
 import RichTextEditor from "@/components/ui/rich-text-editor";
@@ -140,7 +137,7 @@ export default function EducationForm({ initialData, mode }: EducationFormProps)
     setFormData({ ...formData, degrees: newDegrees });
   };
 
-  const updateDegree = (index: number, field: keyof Degree, value: any) => {
+  const updateDegree = (index: number, field: keyof Degree, value: string | boolean | string[]) => {
     const newDegrees = [...formData.degrees];
     newDegrees[index] = { ...newDegrees[index], [field]: value };
     setFormData({ ...formData, degrees: newDegrees });

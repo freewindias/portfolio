@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PlusIcon, TrashIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import RichTextEditor from "@/components/ui/rich-text-editor";
 import { Id } from "@/convex/_generated/dataModel";
 

@@ -2,6 +2,7 @@
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
 import { audiowide } from "@/font";
 import { WorkExperience } from "../_components/work-experience";
@@ -30,7 +31,7 @@ export default function Experience() {
         <div>
           <WorkExperience 
             className="w-full" 
-            experiences={(experiences as any) || []} 
+            experiences={(experiences as Doc<"experiences">[]) || []} 
           />
         </div>
     </section>

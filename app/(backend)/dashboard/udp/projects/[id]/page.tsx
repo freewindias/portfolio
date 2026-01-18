@@ -3,7 +3,7 @@
 import { use } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Id, Doc } from "@/convex/_generated/dataModel";
 import ProjectForm from "@/app/(backend)/_components/ufdp/project-form";
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,7 +22,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Edit Project</h1>
-      <ProjectForm mode="edit" initialData={project as any} />
+      <ProjectForm mode="edit" initialData={project as Doc<"projects">} />
     </div>
   );
 }

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { FC, Suspense, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { IconContext } from "react-icons";
-import { Loader2Icon } from "lucide-react";
 
 // Types for the dynamic icon props
 interface DynamicIconProps extends React.ComponentProps<"svg"> {
@@ -14,21 +13,15 @@ interface DynamicIconProps extends React.ComponentProps<"svg"> {
 const iconCache: Record<string, React.ComponentType | null> = {};
 
 export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props }) => {
-  // Validate icon name - return placeholder if invalid
-  if (!name || name.trim().length === 0) {
-    return (
-      <span className={`inline-block bg-muted/20 rounded-md ${className}`} style={{ width: '1em', height: '1em' }} />
-    );
-  }
-
   const [IconComponent, setIconComponent] = useState<React.ComponentType | null>(() => {
     // Only use cached value if it's a valid component, not null
+    if (!name) return null;
     const cached = iconCache[name];
     return (cached && typeof cached === 'function') ? cached : null;
   });
   
   // Extract the prefix (e.g. "Fa" from "FaReact")
-  const prefix = name.substring(0, 2).toLowerCase();
+  const prefix = name ? name.substring(0, 2).toLowerCase() : "";
 
   useEffect(() => {
     // Skip if no name or if we already have a valid cached component
@@ -50,11 +43,6 @@ export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props })
         let iconModule;
 
         // Route to the correct sub-library key based on prefix
-        // We use specific imports to help bundlers (though dynamic keys are tricky)
-        // Note: In Next.js/Webpack, dynamic imports with template strings work best
-        // if they are somewhat static. However, for react-icons, standardizing 
-        // on the 2-letter prefix is the most robust way.
-        
         switch (prefix) {
           case "fa": // FontAwesome
              // Check if it's Fa6
@@ -107,16 +95,16 @@ export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props })
              break;
           case "ci": // Circum
              iconModule = await import("react-icons/ci");
-            break;
+             break;
           default:
-            // Fallback or try to guess? For now, no generic fallback to avoid huge bundles
+            // Fallback
             console.warn(`Icon prefix '${prefix}' for '${name}' not explicitly handled.`);
             iconCache[name] = null;
             break;
         }
 
         if (iconModule && isMounted) {
-          const Component = (iconModule as any)[name];
+          const Component = (iconModule as unknown as Record<string, React.ComponentType>)[name];
           if (Component && typeof Component === 'function') {
             iconCache[name] = Component;
             setIconComponent(() => Component);
@@ -141,6 +129,13 @@ export const DynamicIcon: FC<DynamicIconProps> = ({ name, className, ...props })
       isMounted = false;
     };
   }, [name, prefix]);
+
+  // Validate icon name - return placeholder if invalid or empty
+  if (!name || name.trim().length === 0) {
+    return (
+      <span className={`inline-block bg-muted/20 rounded-md ${className}`} style={{ width: '1em', height: '1em' }} />
+    );
+  }
 
   // Always check if IconComponent is valid before rendering
   if (!IconComponent || typeof IconComponent !== 'function') {

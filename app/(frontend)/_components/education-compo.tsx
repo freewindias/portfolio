@@ -19,18 +19,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-const iconMap = {
-  code: CodeXmlIcon,
-  design: DraftingCompassIcon,
-  business: BriefcaseBusinessIcon,
-  education: GraduationCapIcon,
-} as const;
+
 
 /**
  * Represents the valid keys of the `iconMap` object, used to specify the type of icon
  * associated with an education position.
  */
-export type educationPositionIconType = keyof typeof iconMap;
+// iconMap removed in favor of dynamic icons
+export type educationPositionIconType = string;
 
 export type educationPositionItemType = {
   /** Unique identifier for the position */
@@ -143,7 +139,7 @@ export function EducationPositionItem({
 }: {
   position: educationPositionItemType;
 }) {
-  const educationIcon = iconMap[position.icon || "business"];
+
 
   return (
     <Collapsible defaultOpen={position.isExpanded} asChild>

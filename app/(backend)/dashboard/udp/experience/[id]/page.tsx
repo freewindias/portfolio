@@ -19,14 +19,24 @@ export default function EditExperiencePage({ params }: { params: Promise<{ id: s
     return <div className="p-8">Experience not found</div>;
   }
 
-  // Transform data to match form expectations if necessary
-  // The backend data shape should match what the form expects mostly
-  // We need to ensure types align for the form initialData
+  const initialData = {
+    ...experience,
+    companyLogo: experience.companyLogo || "",
+    isCurrentEmployer: experience.isCurrentEmployer ?? false,
+    positions: experience.positions.map(p => ({
+      ...p,
+      employmentType: p.employmentType || "Full-time",
+      icon: p.icon || "",
+      description: p.description || "",
+      skills: p.skills || [],
+      isExpanded: p.isExpanded ?? false,
+    }))
+  };
 
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Edit Experience</h1>
-      <ExperienceForm mode="edit" initialData={experience as any} /> 
+      <ExperienceForm mode="edit" initialData={initialData} /> 
     </div>
   );
 }

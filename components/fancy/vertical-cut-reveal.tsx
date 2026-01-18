@@ -123,7 +123,7 @@ const VerticalCutReveal = forwardRef<VerticalCutRevealRef, TextProps>(
         }
         return Math.abs(staggerFrom - index) * staggerDuration
       },
-      [elements.length, staggerFrom, staggerDuration]
+      [elements, splitBy, staggerFrom, staggerDuration]
     )
 
     const startAnimation = useCallback(() => {
@@ -146,6 +146,7 @@ const VerticalCutReveal = forwardRef<VerticalCutRevealRef, TextProps>(
       if (autoStart || isInView) {
         startAnimation()
       }
+       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [autoStart, isInView, startAnimation])
 
     const variants = {

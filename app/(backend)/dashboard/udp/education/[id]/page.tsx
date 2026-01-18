@@ -19,10 +19,22 @@ export default function EditEducationPage({ params }: { params: Promise<{ id: st
     return <div className="p-8">Education entry not found</div>;
   }
 
+  const initialData = {
+    ...education,
+    institutionLogo: education.institutionLogo || "",
+    isCurrentEmployer: education.isCurrentEmployer ?? false,
+    degrees: education.degrees.map(d => ({
+      ...d,
+      description: d.description || "",
+      skills: d.skills || [],
+      isExpanded: d.isExpanded ?? false,
+    }))
+  };
+
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Edit Education</h1>
-      <EducationForm mode="edit" initialData={education as any} />
+      <EducationForm mode="edit" initialData={initialData} />
     </div>
   );
 }

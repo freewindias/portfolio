@@ -49,7 +49,7 @@ export function StickyFooter({ className, ...props }: StickyFooterProps) {
 								</p>
 								<div className="flex gap-2">
 									{socialLinks.map((link) => (
-										<Button size="icon" variant="outline" className="size-8">
+										<Button key={link.title} size="icon" variant="outline" className="size-8">
 											<link.icon className="size-4" />
 										</Button>
 									))}
