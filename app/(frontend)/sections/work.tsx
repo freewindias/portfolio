@@ -15,7 +15,7 @@ export default async function Work() {
       <div className="">
         <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.025}
+          staggerDuration={0.01}
           staggerDelay={0}
           staggerFrom="first"
           transition={{

@@ -9,7 +9,7 @@ export default function TechStack() {
     <section className="h-full mt-20">
       <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.025}
+          staggerDuration={0.01}
           staggerDelay={0}
           staggerFrom="first"
           transition={{
@@ -24,7 +24,7 @@ export default function TechStack() {
         <div className="mt-5">
           <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.015}
+          staggerDuration={0.01}
           staggerDelay={0.3}
           staggerFrom="first"
           transition={{

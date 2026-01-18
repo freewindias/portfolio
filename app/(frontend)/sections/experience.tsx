@@ -4,7 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
 import { audiowide } from "@/font";
-import { ExperienceItemType, WorkExperience } from "../_components/work-experience";
+import { WorkExperience } from "../_components/work-experience";
 
 
 export default function Experience() {
@@ -14,7 +14,7 @@ export default function Experience() {
     <section className="h-full mt-20 relative">
       <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.025}
+          staggerDuration={0.01}
           staggerDelay={0}
           staggerFrom="first"
           transition={{
