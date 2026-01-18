@@ -27,9 +27,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <main className="min-h-screen px-4 pb-20">
       {/* Back Button */}
       <div className="mt-20 mb-8">
-        <Button asChild variant="ghost" size="sm" className="rounded-full">
-          <Link href="/projects">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+        <Button variant="outline" asChild className="rounded-full px-6 py-5 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-base font-normal">
+          <Link href="/projects" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Projects
           </Link>
         </Button>
