@@ -5,7 +5,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth } from "convex/react";
 import { useRouter } from "next/navigation";
 
-const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds
+const INACTIVITY_TIMEOUT = 3 * 60 * 1000; // 2 minutes in milliseconds
 
 /**
  * Hook that monitors user activity and automatically logs out after 5 minutes of inactivity.

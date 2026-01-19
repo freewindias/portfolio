@@ -29,6 +29,15 @@ const data = {
   },
   navMain: [
     {
+      title: "Home",
+      items: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+        },
+      ],
+    },
+    {
       title: "Update Frontend Data",
       items: [
         {
