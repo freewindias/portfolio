@@ -13,8 +13,16 @@ export default async function ProjectsPage() {
   const projects = await fetchQuery(api.projects.list, {});
 
   return (
-    <section className="min-h-screen px-4 pb-20">
+    <section className="min-h-screen px-4">
       <div className='mt-36 md:mt-20 mb-2'>
+        <div className="flex justify-start">
+          <Button asChild variant="outline" size="lg" className="rounded-full px-8">
+            <Link href="/">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Link>
+          </Button>
+        </div>
         <VerticalCutReveal
           splitBy="characters"
           staggerDuration={0.025}
@@ -43,15 +51,6 @@ export default async function ProjectsPage() {
             }} 
           />
         ))}
-      </div>
-
-      <div className="flex justify-center mt-10">
-        <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-          <Link href="/">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Link>
-        </Button>
       </div>
     </section>
   )

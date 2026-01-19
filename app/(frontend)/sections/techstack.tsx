@@ -21,7 +21,7 @@ export default function TechStack() {
         >
           {`TechStack`}
         </VerticalCutReveal>
-        <div className="mt-5">
+        <div>
           <VerticalCutReveal
           splitBy="characters"
           staggerDuration={0.015}

@@ -24,20 +24,20 @@ export default function Contact() {
   useEffect(() => {
     if (isInView) {
       const timers = [
-        setTimeout(() => mapRef.current?.playFromBeginning(), 800),
-        setTimeout(() => mailRef.current?.playFromBeginning(), 1000),
-        setTimeout(() => linkedinRef.current?.playFromBeginning(), 1200),
-        setTimeout(() => githubRef.current?.playFromBeginning(), 1400),
+        setTimeout(() => mapRef.current?.playFromBeginning(), 400),
+        setTimeout(() => mailRef.current?.playFromBeginning(), 600),
+        setTimeout(() => linkedinRef.current?.playFromBeginning(), 800),
+        setTimeout(() => githubRef.current?.playFromBeginning(), 1000),
       ];
       return () => timers.forEach(clearTimeout);
     }
   }, [isInView]);
 
   const contactItems = [
-    { icon: Map, ref: mapRef, text: "Vancouver, BC", delay: 0.4 },
-    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.5 },
-    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.6 },
-    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.7 },
+    { icon: Map, ref: mapRef, text: "Vancouver, BC", delay: 0.1 },
+    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.2 },
+    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.3 },
+    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.4 },
   ];
 
   return (
@@ -130,14 +130,14 @@ export default function Contact() {
                   {isInView && (
                     <VerticalCutReveal
                       splitBy="characters"
-                      staggerDuration={0.025}
-                      staggerDelay={0.8}
+                      staggerDuration={0.01}
+                      staggerDelay={0.4}
                       staggerFrom="first"
                       transition={{
                         type: "spring",
                         stiffness: 200,
                         damping: 21,
-                        delay: 0.8
+                        delay: 0.4
                       }}
                       wordLevelClassName="text-lg md:text-xl font-medium"
                     >
