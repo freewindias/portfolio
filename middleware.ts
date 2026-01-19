@@ -17,11 +17,7 @@ export default convexAuthNextjsMiddleware(
     }
   },
   {
-    cookieConfig: {
-      // No maxAge set - makes this a session cookie that expires when browser closes
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-    },
+    // The default cookie config is a session cookie
   }
 );
 
