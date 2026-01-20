@@ -54,13 +54,13 @@ export const create = mutation({
     year: v.string(),
     category: v.string(),
     client: v.string(),
-    description: v.string(),
     overview: v.string(),
     heroImage: v.string(),
     heroImageCaption: v.optional(v.string()),
     galleryImages: v.optional(v.array(v.string())),
     featured: v.optional(v.boolean()),
     order: v.optional(v.number()),
+    websiteUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -82,13 +82,13 @@ export const update = mutation({
     year: v.optional(v.string()),
     category: v.optional(v.string()),
     client: v.optional(v.string()),
-    description: v.optional(v.string()),
     overview: v.optional(v.string()),
     heroImage: v.optional(v.string()),
     heroImageCaption: v.optional(v.string()),
     galleryImages: v.optional(v.array(v.string())),
     featured: v.optional(v.boolean()),
     order: v.optional(v.number()),
+    websiteUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);

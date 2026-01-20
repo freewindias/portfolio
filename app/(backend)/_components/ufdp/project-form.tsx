@@ -19,13 +19,13 @@ type ProjectData = {
   year: string;
   category: string;
   client: string;
-  description: string;
   overview: string;
   heroImage: string;
   heroImageCaption?: string;
   galleryImages?: string[];
   featured?: boolean;
   order?: number;
+  websiteUrl?: string;
 };
 
 interface ProjectFormProps {
@@ -48,13 +48,13 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
     year: initialData?.year || new Date().getFullYear().toString(),
     category: initialData?.category || "",
     client: initialData?.client || "",
-    description: initialData?.description || "",
     overview: initialData?.overview || "",
     heroImage: initialData?.heroImage || "",
     heroImageCaption: initialData?.heroImageCaption || "",
     galleryImages: initialData?.galleryImages || [],
     featured: initialData?.featured || false,
     order: initialData?.order || 0,
+    websiteUrl: initialData?.websiteUrl || "",
   });
 
   // Auto-generate slug from title
@@ -228,23 +228,24 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
           />
           <Label htmlFor="featured">Featured Project (show on homepage)</Label>
         </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="websiteUrl">Website URL</Label>
+          <Input
+            id="websiteUrl"
+            value={formData.websiteUrl}
+            onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+            placeholder="https://example.com"
+          />
+          <p className="text-xs text-muted-foreground">
+            Link to the live project website
+          </p>
+        </div>
       </div>
 
       {/* Content */}
       <div className="space-y-4 border p-4 rounded-lg">
         <h2 className="text-xl font-semibold">Content</h2>
-
-        <div className="grid gap-2">
-          <Label htmlFor="description">Short Description *</Label>
-          <Textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            required
-            placeholder="A brief description for project cards..."
-            rows={3}
-          />
-        </div>
 
         <div className="grid gap-2">
           <Label htmlFor="overview">Project Overview *</Label>

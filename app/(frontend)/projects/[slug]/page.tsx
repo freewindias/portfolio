@@ -36,7 +36,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </div>
 
       {/* Project Header */}
-      <div className="max-w-7xl mx-auto">
+      <div className="">
         <div className="mb-12">
           <p className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
             — PROJECT
@@ -59,6 +59,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <p className="text-muted-foreground mb-1">Client</p>
               <p className="font-medium">[{project.client}]</p>
             </div>
+            {project.websiteUrl && (
+              <div>
+                <p className="text-muted-foreground mb-1">View Website</p>
+                <p className="font-medium">
+                  <a 
+                    href={project.websiteUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    [Live]
+                  </a>
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -83,14 +98,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
 
         {/* Project Overview */}
-        <div className="max-w-4xl mb-16">
+        <div className="mb-16">
           <h2 className="text-sm text-muted-foreground uppercase tracking-wider mb-6">
-            PROJECT OVERVIEW
+            — PROJECT OVERVIEW
           </h2>
           <div className="space-y-6">
-            <h3 className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed">
-              {project.description}
-            </h3>
             <div className="prose prose-lg max-w-none">
               <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                 {project.overview}
@@ -114,15 +126,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ))}
           </div>
         )}
-
-        {/* Contact CTA */}
-        <div className="flex justify-center mt-20">
-          <Button asChild size="lg" className="rounded-full px-8">
-            <Link href="/#contact">
-              Contact Us →
-            </Link>
-          </Button>
-        </div>
       </div>
     </main>
   );

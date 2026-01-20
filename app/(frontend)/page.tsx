@@ -11,11 +11,21 @@ export default function Home() {
   return (
     <main className='px-4'>
       <Hero />
-      <Work />
-      <Experience />
-      <Education />
-      <TechStack />
-      <Contact />
+      <div id="work">
+        <Work />
+      </div>
+      <div id="experience">
+        <Experience />
+      </div>
+      <div id="education">
+        <Education />
+      </div>
+      <div id="techstack">
+        <TechStack />
+      </div>
+      <div id="contact">
+        <Contact />
+      </div>
     </main>
   )
 }
