@@ -24,7 +24,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <main className="min-h-screen px-4 pb-20">
+    <main className="min-h-screen px-4">
       {/* Back Button */}
       <div className="mt-20 mb-8">
         <Button variant="outline" asChild className="rounded-full px-6 py-5 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-base font-normal">
@@ -79,12 +79,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Hero Image */}
         <div className="mb-16">
-          <div className="relative aspect-16/10 w-full overflow-hidden rounded-lg">
+          <div className="relative w-full h-[50vh] md:h-[65vh] overflow-hidden rounded-lg">
             <Image
               src={project.heroImage}
               alt={project.title}
               fill
-              className="object-cover"
+              className="object-contain"
               priority
             />
           </div>
@@ -103,6 +103,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             — PROJECT OVERVIEW
           </h2>
           <div className="space-y-6">
+            {project.description && (
+              <p className="text-xl text-foreground italic leading-relaxed max-w-2xl">
+                {project.description}
+              </p>
+            )}
             <div className="prose prose-lg max-w-none">
               <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                 {project.overview}
@@ -113,14 +118,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Gallery Images */}
         {project.galleryImages && project.galleryImages.length > 0 && (
-          <div className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mb-16 grid grid-cols-1 gap-8">
             {project.galleryImages.map((image, index) => (
-              <div key={index} className="relative aspect-4/3 overflow-hidden rounded-lg">
+              <div key={index} className="relative w-full h-[90vh] overflow-hidden">
                 <Image
                   src={image}
                   alt={`${project.title} - Image ${index + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
             ))}

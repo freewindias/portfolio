@@ -48,6 +48,7 @@ export default async function ProjectsPage() {
               category: project.category,
               image: project.heroImage,
               slug: project.slug,
+              description: project.description,
             }} 
           />
         ))}

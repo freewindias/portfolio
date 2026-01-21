@@ -54,5 +54,6 @@ export default defineSchema({
     featured: v.optional(v.boolean()), // Show in featured work section
     order: v.optional(v.number()), // Display order
     websiteUrl: v.optional(v.string()), // Link to the live website
+    description: v.optional(v.string()), // Short description
   }).index("by_slug", ["slug"]),
 });

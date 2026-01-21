@@ -20,7 +20,7 @@ export const list = query({
     }
     
     // Sort by order field, then by title
-    return projects.sort((a, b) => {
+    projects.sort((a, b) => {
       if (a.order !== undefined && b.order !== undefined) {
         return a.order - b.order;
       }
@@ -28,6 +28,29 @@ export const list = query({
       if (b.order !== undefined) return 1;
       return a.title.localeCompare(b.title);
     });
+
+    return await Promise.all(
+      projects.map(async (project) => {
+        const resolveImage = async (image: string) => {
+          if (image.startsWith("/") || image.startsWith("http")) {
+            return image;
+          }
+          try {
+            return (await ctx.storage.getUrl(image)) ?? image;
+          } catch {
+            return image;
+          }
+        };
+
+        return {
+          ...project,
+          heroImage: await resolveImage(project.heroImage),
+          galleryImages: project.galleryImages
+            ? await Promise.all(project.galleryImages.map(resolveImage))
+            : undefined,
+        };
+      })
+    );
   },
 });
 
@@ -42,7 +65,26 @@ export const getBySlug = query({
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .first();
     
-    return project;
+    if (!project) return null;
+
+    const resolveImage = async (image: string) => {
+      if (image.startsWith("/") || image.startsWith("http")) {
+        return image;
+      }
+      try {
+        return (await ctx.storage.getUrl(image)) ?? image;
+      } catch {
+        return image;
+      }
+    };
+
+    return {
+      ...project,
+      heroImage: await resolveImage(project.heroImage),
+      galleryImages: project.galleryImages
+        ? await Promise.all(project.galleryImages.map(resolveImage))
+        : undefined,
+    };
   },
 });
 
@@ -61,6 +103,7 @@ export const create = mutation({
     featured: v.optional(v.boolean()),
     order: v.optional(v.number()),
     websiteUrl: v.optional(v.string()),
+    description: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -89,6 +132,7 @@ export const update = mutation({
     featured: v.optional(v.boolean()),
     order: v.optional(v.number()),
     websiteUrl: v.optional(v.string()),
+    description: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);

@@ -26,6 +26,7 @@ type ProjectData = {
   featured?: boolean;
   order?: number;
   websiteUrl?: string;
+  description?: string;
 };
 
 interface ProjectFormProps {
@@ -55,6 +56,7 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
     featured: initialData?.featured || false,
     order: initialData?.order || 0,
     websiteUrl: initialData?.websiteUrl || "",
+    description: initialData?.description || "",
   });
 
   // Auto-generate slug from title
@@ -240,6 +242,16 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
           <p className="text-xs text-muted-foreground">
             Link to the live project website
           </p>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="description">Short Description</Label>
+          <Textarea
+            id="description"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="A brief summary of the project"
+            rows={2}
+          />
         </div>
       </div>
 

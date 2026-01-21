@@ -13,6 +13,7 @@ interface ProjectCardProps {
     category: string;
     image: string;
     slug: string;
+    description?: string;
   };
 }
 
