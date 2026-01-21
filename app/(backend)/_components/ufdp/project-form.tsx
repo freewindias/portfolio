@@ -9,9 +9,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PlusIcon, TrashIcon } from "lucide-react";
 import RichTextEditor from "@/components/ui/rich-text-editor";
 import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "convex/react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { EyeIcon, GripVerticalIcon, TrashIcon } from "lucide-react";
+import NextImage from "next/image";
 
 type ProjectData = {
   title: string;
@@ -124,6 +143,32 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
     const newGallery = [...(formData.galleryImages || [])];
     newGallery.splice(index, 1);
     setFormData({ ...formData, galleryImages: newGallery });
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setFormData((prev) => {
+        const oldIndex = prev.galleryImages?.indexOf(active.id as string) ?? -1;
+        const newIndex = prev.galleryImages?.indexOf(over.id as string) ?? -1;
+
+        if (oldIndex !== -1 && newIndex !== -1) {
+          return {
+            ...prev,
+            galleryImages: arrayMove(prev.galleryImages!, oldIndex, newIndex),
+          };
+        }
+        return prev;
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -320,21 +365,29 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
           </div>
           
           {formData.galleryImages && formData.galleryImages.length > 0 && (
-            <div className="mt-2 space-y-2">
-              <Label>Gallery Images ({formData.galleryImages.length})</Label>
-              {formData.galleryImages.map((img, index) => (
-                <div key={index} className="flex items-center gap-2 p-2 border rounded">
-                  <span className="flex-1 text-sm truncate">{img}</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeGalleryImage(index)}
-                  >
-                    <TrashIcon className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+            <div className="mt-4 space-y-3">
+              <Label className="text-sm font-medium">Gallery Images ({formData.galleryImages.length})</Label>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={formData.galleryImages}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className="space-y-2">
+                    {formData.galleryImages.map((img, index) => (
+                      <SortableImage
+                        key={img}
+                        id={img}
+                        index={index}
+                        onRemove={removeGalleryImage}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             </div>
           )}
         </div>
@@ -347,5 +400,94 @@ export default function ProjectForm({ initialData, mode }: ProjectFormProps) {
         <Button type="submit">Save Project</Button>
       </div>
     </form>
+  );
+}
+
+interface SortableImageProps {
+  id: string;
+  index: number;
+  onRemove: (index: number) => void;
+}
+
+function SortableImage({ id, index, onRemove }: SortableImageProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : "auto",
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  const resolvedUrl = useQuery(api.projects.getStorageUrl, 
+    (id.startsWith("http") || id.startsWith("/")) ? "skip" : { storageId: id }
+  );
+  
+  const displayUrl = (id.startsWith("http") || id.startsWith("/")) ? id : resolvedUrl;
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-3 p-3 border rounded-lg bg-card shadow-sm group"
+    >
+      <div 
+        {...attributes} 
+        {...listeners} 
+        className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded transition-colors"
+      >
+        <GripVerticalIcon className="h-5 w-5 text-muted-foreground" />
+      </div>
+
+      <div className="relative h-12 w-12 rounded border bg-muted overflow-hidden shrink-0">
+        {displayUrl ? (
+          <NextImage
+            src={displayUrl}
+            alt={`Image ${index + 1}`}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <div className="h-full w-full flex items-center justify-center text-[10px] text-muted-foreground">
+            ...
+          </div>
+        )}
+      </div>
+
+      <span className="flex-1 text-sm font-medium truncate max-w-[200px]">
+        {id.split("/").pop() || id}
+      </span>
+
+      <div className="flex items-center gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+        {displayUrl && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => window.open(displayUrl, "_blank")}
+            title="View image"
+            className="h-8 w-8"
+          >
+            <EyeIcon className="h-4 w-4" />
+          </Button>
+        )}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => onRemove(index)}
+          className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+        >
+          <TrashIcon className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
   );
 }

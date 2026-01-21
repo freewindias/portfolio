@@ -3,10 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useLenis } from "lenis/react";
+import { usePathname, useRouter } from "next/navigation";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const lenis = useLenis();
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
@@ -15,12 +20,35 @@ export function Navbar() {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Work", href: "#work" },
-    { name: "Experience", href: "#experience" },
-    { name: "Education", href: "#education" },
-    { name: "TechStack", href: "#techstack" },
-    { name: "Contact", href: "#contact" },
+    { name: "Work", href: "/#work" },
+    { name: "Experience", href: "/#experience" },
+    { name: "Education", href: "/#education" },
+    { name: "TechStack", href: "/#techstack" },
+    { name: "Contact", href: "/#contact" },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // If it's a section link and we are on the homepage
+    if (href.startsWith("/#") && pathname === "/") {
+      e.preventDefault();
+      const targetId = href.replace("/#", "");
+      const element = document.getElementById(targetId);
+      if (element && lenis) {
+        lenis.scrollTo(element, { 
+          offset: -80, // Offset for navbar height
+          duration: 1.5,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      }
+      setIsOpen(false);
+    } else if (href === "/" && pathname === "/") {
+      e.preventDefault();
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 1.5 });
+      }
+      setIsOpen(false);
+    }
+  };
 
   return (
     <nav
@@ -39,6 +67,7 @@ export function Navbar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               className="text-sm font-medium text-black/80 hover:text-black transition-colors whitespace-nowrap"
             >
               {item.name}
@@ -47,15 +76,17 @@ export function Navbar() {
         </div>
 
         {/* Logo Placeholder */}
-        <div className="w-10 h-10 shadow-sm shrink-0 rounded-full overflow-hidden relative z-10 block">
-          <Image
-            src="/logo.jpeg"
-            alt="Logo"
-            width={40}
-            height={40}
-            className="object-cover"
-          />
-        </div>
+        <Link href="/" onClick={(e) => handleNavClick(e, "/")}>
+          <div className="w-10 h-10 shadow-sm shrink-0 rounded-full overflow-hidden relative z-10 block cursor-pointer">
+            <Image
+              src="/logo.jpeg"
+              alt="Logo"
+              width={40}
+              height={40}
+              className="object-cover"
+            />
+          </div>
+        </Link>
 
         {/* Desktop Right Items */}
         <div
@@ -65,6 +96,7 @@ export function Navbar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               className="text-sm font-medium text-black/80 hover:text-black transition-colors whitespace-nowrap"
             >
               {item.name}
@@ -92,7 +124,7 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className="text-lg font-medium text-gray-800"
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => handleNavClick(e, item.href)}
             >
               {item.name}
             </Link>
