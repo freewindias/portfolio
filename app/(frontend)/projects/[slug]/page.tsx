@@ -24,12 +24,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <main className="min-h-screen px-4">
+    <main className="min-h-screen px-4 mt-24 md:mt-20">
       {/* Back Button */}
-      <div className="mt-20 mb-8">
-        <Button variant="outline" asChild className="rounded-full px-6 py-5 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-base font-normal">
-          <Link href="/projects" className="flex items-center gap-2">
-            <ArrowLeft className="h-4 w-4 mr-1" />
+      <div className="mb-8">
+        <Button asChild variant="outline" size="lg" className="rounded-full px-8">
+          <Link href="/projects">
+            <ArrowLeft className="h-4 w-4" />
             Back to Projects
           </Link>
         </Button>

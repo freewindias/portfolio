@@ -14,7 +14,7 @@ export default async function ProjectsPage() {
 
   return (
     <section className="min-h-screen px-4">
-      <div className='mt-36 md:mt-20 mb-2'>
+      <div className='mt-24 md:mt-20 mb-2'>
         <div className="flex justify-start">
           <Button asChild variant="outline" size="lg" className="rounded-full px-8">
             <Link href="/">
