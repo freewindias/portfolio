@@ -2,11 +2,10 @@
 
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
 import { audiowide } from "@/font";
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Player } from "@lordicon/react"
 import { motion, useInView } from "motion/react";
 import Link from "next/link"
-
 import Map from "@/public/heroIcons/map.json"
 import Mail from "@/public/heroIcons/mail.json"
 import Linkedin from "@/public/heroIcons/linkedin.json"
@@ -35,9 +34,9 @@ export default function Contact() {
 
   const contactItems = [
     { icon: Map, ref: mapRef, text: "Vancouver, BC", delay: 0.1 },
-    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.2 },
-    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.3 },
-    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.4 },
+    { icon: Mail, ref: mailRef, text: "diasfreewin6@gmail.com", href: "mailto:diasfreewin6@gmail.com", delay: 0.1 },
+    { icon: Linkedin, ref: linkedinRef, text: "Linkedin", href: "https://www.linkedin.com/in/freewindias/", delay: 0.2 },
+    { icon: Github, ref: githubRef, text: "Github", href: "https://github.com/freewindias", delay: 0.3 },
   ];
 
   return (
@@ -45,7 +44,7 @@ export default function Contact() {
       <div className="w-full flex justify-start mb-12">
         <VerticalCutReveal
           splitBy="characters"
-          staggerDuration={0.025}
+          staggerDuration={0.01}
           staggerDelay={0}
           staggerFrom="first"
           transition={{

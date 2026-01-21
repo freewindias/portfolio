@@ -59,7 +59,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 <h3 className="font-bold text-lg md:text-xl group-hover:text-primary transition-colors">
                   {project.title}
                 </h3>
-                <p className="text-muted-foreground text-sm">{project.category}</p>
+                <p className="text-muted-foreground text-sm">[{project.category}]</p>
               </div>
             </div>
           </CardContent>

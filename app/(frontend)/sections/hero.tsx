@@ -2,13 +2,12 @@
 
 import VerticalCutReveal from '@/components/fancy/vertical-cut-reveal'
 import { audiowide } from '@/font'
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import ICON from "@/public/heroIcons/coffee.json"
 import { Player } from "@lordicon/react"
 import { motion } from "motion/react";
 import Linkedin from "@/public/heroIcons/linkedin.json"
 import Github from "@/public/heroIcons/github.json"
-import Mail from "@/public/heroIcons/mail.json"
 import Link from "next/link"
 
 
@@ -32,22 +31,15 @@ export default function Hero() {
   useEffect(() => {
     setTimeout(() => {
       linkedinRef.current?.playFromBeginning();
-    }, 1200);
+    }, 1000);
   }, []);
 
   const githubRef = useRef<Player>(null);
   useEffect(() => {
     setTimeout(() => {
       githubRef.current?.playFromBeginning();
-    }, 1300);
+    }, 1100);
   }, []);
-
-  const mailRef = useRef<Player>(null);
-  useEffect(() => {
-    setTimeout(() => {
-      mailRef.current?.playFromBeginning();
-    }, 2600);
-  }, []); 
 
   return (
     <section className='h-full pb-56 md:pb-64'>
