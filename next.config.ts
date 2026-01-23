@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "unique-meerkat-807.convex.cloud",
+        hostname: "amicable-sardine-242.convex.cloud",
       },
     ],
   },
