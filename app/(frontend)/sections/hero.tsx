@@ -42,8 +42,8 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className='h-screen flex flex-col justify-center'>
-      <div className='flex'>
+    <section className='h-full pb-56 md:h-screen flex flex-col justify-center'>
+      <div className='flex mt-36 md:mt-0'>
         <VerticalCutReveal
           splitBy="characters"
           staggerDuration={0.025}
