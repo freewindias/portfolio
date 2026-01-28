@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "amicable-sardine-242.convex.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "unique-meerkat-807.convex.cloud",
+      },
     ],
   },
   experimental: {

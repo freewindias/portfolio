@@ -104,15 +104,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </h2>
           <div className="space-y-6">
             {project.description && (
-              <p className="text-xl text-foreground italic leading-relaxed max-w-2xl">
+              <p className="text-xl text-foreground italic leading-relaxed">
                 {project.description}
               </p>
             )}
-            <div className="prose prose-lg max-w-none">
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                {project.overview}
-              </p>
-            </div>
+            <div 
+              className="prose prose-lg max-w-none text-muted-foreground leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: project.overview || "" }}
+            />
           </div>
         </div>
 
