@@ -51,7 +51,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 src={project.image}
                 alt={project.title}
                 fill
-                className="object-cover"
+                className="object-contain"
               />
             </div>
             <div className="flex items-center justify-between bg-white py-2 px-2 border-t border-zinc-200">

@@ -2,9 +2,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
 
-// The schema is normally optional, but Convex Auth
-// requires indexes defined on `authTables`.
-// The schema provides more precise TypeScript types.
+
 export default defineSchema({
   ...authTables,
   experiences: defineTable({
@@ -56,4 +54,33 @@ export default defineSchema({
     websiteUrl: v.optional(v.string()), // Link to the live website
     description: v.optional(v.string()), // Short description
   }).index("by_slug", ["slug"]),
+
+  budgetPeriods: defineTable({
+    month: v.string(),
+    year: v.number(),
+    userId: v.optional(v.string()), // For future multi-user support
+  }).index("by_month_year", ["month", "year"]),
+
+  budgetCategories: defineTable({
+    periodId: v.id("budgetPeriods"),
+    type: v.union(
+      v.literal("income"),
+      v.literal("expense"),
+      v.literal("bills"),
+      v.literal("savings"),
+      v.literal("debt")
+    ),
+    name: v.string(),
+    plannedAmount: v.number(),
+    actualAmount: v.optional(v.number()), // For manual entry
+    isPaid: v.optional(v.boolean()), // Specific to bills and debt
+  }).index("by_period", ["periodId"]),
+
+  transactions: defineTable({
+    periodId: v.id("budgetPeriods"),
+    date: v.string(), // YYYY-MM-DD
+    categoryId: v.id("budgetCategories"),
+    amount: v.number(),
+    notes: v.optional(v.string()),
+  }).index("by_period", ["periodId"]),
 });

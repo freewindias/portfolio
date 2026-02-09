@@ -55,6 +55,15 @@ const data = {
       ],
     },
     {
+      title: "Finance",
+      items: [
+        {
+          title: "Expense Tracker",
+          url: "/dashboard/expense-tracker",
+        },
+      ],
+    },
+    {
       title: "Settings",
       items: [
         {

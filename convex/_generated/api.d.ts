@@ -9,10 +9,12 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as budget from "../budget.js";
 import type * as education from "../education.js";
 import type * as experience from "../experience.js";
 import type * as http from "../http.js";
 import type * as projects from "../projects.js";
+import type * as transactions from "../transactions.js";
 import type * as users from "../users.js";
 
 import type {
@@ -23,10 +25,12 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  budget: typeof budget;
   education: typeof education;
   experience: typeof experience;
   http: typeof http;
   projects: typeof projects;
+  transactions: typeof transactions;
   users: typeof users;
 }>;
 
