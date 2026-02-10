@@ -5,6 +5,8 @@ import ConvexClientProvider from "@/components/ConvexClientProvider";
 import ReactLenis from "lenis/react";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Toaster } from "sonner";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 
 export const metadata: Metadata = {
@@ -21,18 +23,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ConvexAuthNextjsServerProvider>
-      <html lang="en">
-        <ReactLenis root>
-          <body className="antialiased">
-            <ConvexClientProvider>
-              <ScrollToTop />
-              {children}
-            </ConvexClientProvider>
-            <Toaster />
-          </body>
-        </ReactLenis>
-      </html>
-    </ConvexAuthNextjsServerProvider>
+    <>
+      <ConvexAuthNextjsServerProvider>
+        <html lang="en">
+          <ReactLenis root>
+            <body className="antialiased">
+              <ConvexClientProvider>
+                <ScrollToTop />
+                {children}
+              </ConvexClientProvider>
+              <Toaster />
+            </body>
+          </ReactLenis>
+        </html>
+      </ConvexAuthNextjsServerProvider>
+      <SpeedInsights/>
+      <Analytics/>
+    </>
   );
 }

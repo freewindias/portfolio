@@ -62,7 +62,7 @@ export function SummaryDashboard({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <Card className="shadow-sm border-slate-200 overflow-hidden flex flex-col p-0">
+      <Card className="shadow-sm border-slate-200 overflow-hidden flex flex-col p-0 gap-0 py-0">
         <CardHeader className="bg-slate-50 p-1.5 border-b">
           <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Summary</CardTitle>
         </CardHeader>
@@ -88,7 +88,7 @@ export function SummaryDashboard({
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-slate-200 flex flex-col bg-white overflow-hidden p-0">
+      <Card className="shadow-sm border-slate-200 flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
         <CardHeader className="bg-slate-50 p-1.5 border-b">
           <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Actual Money Left</CardTitle>
         </CardHeader>
@@ -128,7 +128,7 @@ export function SummaryDashboard({
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-slate-200 flex flex-col bg-white overflow-hidden p-0">
+      <Card className="shadow-sm border-slate-200 flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
         <CardHeader className="bg-slate-50 p-1.5 border-b">
           <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Budget Left</CardTitle>
         </CardHeader>
