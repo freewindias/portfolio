@@ -62,25 +62,25 @@ export function SummaryDashboard({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <Card className="shadow-sm border-slate-200 overflow-hidden flex flex-col p-0 gap-0 py-0">
-        <CardHeader className="bg-slate-50 p-1.5 border-b">
+      <Card className="shadow-sm border-black overflow-hidden flex flex-col p-0 gap-0 py-0">
+        <CardHeader className="bg-slate-50 p-1.5 border-b border-black">
           <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Summary</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader className="bg-slate-50/50">
-              <TableRow className="hover:bg-transparent h-6 border-b-0">
-                <TableHead className="h-6 px-3 text-[9px] font-semibold text-slate-400 uppercase">Category</TableHead>
-                <TableHead className="h-6 px-3 text-[9px] font-semibold text-slate-400 uppercase text-right">Planned</TableHead>
-                <TableHead className="h-6 px-3 text-[9px] font-semibold text-slate-400 uppercase text-right">Actual</TableHead>
+              <TableRow className="hover:bg-transparent h-6 border-black border-b-0">
+                <TableHead className="h-6 px-3 text-[9px] font-semibold text-black uppercase">Category</TableHead>
+                <TableHead className="h-6 px-3 text-[9px] font-semibold text-black uppercase text-right">Planned</TableHead>
+                <TableHead className="h-6 px-3 text-[9px] font-semibold text-black uppercase text-right">Actual</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {summary.map((s) => (
-                <TableRow key={s.name} className="h-7 border-slate-100 last:border-0 hover:bg-transparent">
+                <TableRow key={s.name} className="h-7 last:border-0 hover:bg-transparent">
                   <TableCell className="py-0 px-3 text-[10px] font-bold text-slate-700">{s.name}</TableCell>
-                  <TableCell className="py-0 px-3 text-[10px] text-right font-medium text-slate-500">{formatCurrency(s.planned)}</TableCell>
-                  <TableCell className="py-0 px-3 text-[10px] text-right font-bold text-slate-900">{formatCurrency(s.actual)}</TableCell>
+                  <TableCell className="py-0 px-3 text-[10px] text-right font-bold text-black">{formatCurrency(s.planned)}</TableCell>
+                  <TableCell className="py-0 px-3 text-[10px] text-right font-bold text-black">{formatCurrency(s.actual)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -88,8 +88,8 @@ export function SummaryDashboard({
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-slate-200 flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
-        <CardHeader className="bg-slate-50 p-1.5 border-b">
+      <Card className="shadow-sm border-black flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
+        <CardHeader className="bg-slate-50 p-1.5 border-b border-black">
           <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Actual Money Left</CardTitle>
         </CardHeader>
         <CardContent className="p-0 flex flex-col items-center justify-center relative pb-4">
@@ -128,8 +128,8 @@ export function SummaryDashboard({
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-slate-200 flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
-        <CardHeader className="bg-slate-50 p-1.5 border-b">
+      <Card className="shadow-sm border-black flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
+        <CardHeader className="bg-slate-50 p-1.5 border-b border-black">
           <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Budget Left</CardTitle>
         </CardHeader>
         <CardContent className="p-0 flex flex-col items-center justify-center relative pb-4">

@@ -54,7 +54,7 @@ export default function ExpenseTrackerPage() {
         </div>
         <div className="flex gap-2">
           <Select value={month} onValueChange={setMonth}>
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-[150px] border-black">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -64,7 +64,7 @@ export default function ExpenseTrackerPage() {
             </SelectContent>
           </Select>
           <Select value={year.toString()} onValueChange={(v) => setYear(parseInt(v))}>
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-[100px] border-black">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

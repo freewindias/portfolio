@@ -43,7 +43,7 @@ export default function Page() {
           <CardTitle className="text-2xl font-bold tracking-tight">Financial Summary</CardTitle>
           <div className="flex gap-2">
             <Select value={month} onValueChange={setMonth}>
-              <SelectTrigger className="w-[130px] h-8 text-xs">
+              <SelectTrigger className="w-[130px] h-8 text-xs border-black">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -53,7 +53,7 @@ export default function Page() {
               </SelectContent>
             </Select>
             <Select value={year.toString()} onValueChange={(v) => setYear(parseInt(v))}>
-              <SelectTrigger className="w-[90px] h-8 text-xs">
+              <SelectTrigger className="w-[90px] h-8 text-xs border-black">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
