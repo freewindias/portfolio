@@ -23,22 +23,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <ConvexAuthNextjsServerProvider>
-        <html lang="en">
-          <ReactLenis root>
-            <body className="antialiased">
-              <ConvexClientProvider>
-                <ScrollToTop />
-                {children}
-              </ConvexClientProvider>
-              <Toaster />
-            </body>
-          </ReactLenis>
-        </html>
-      </ConvexAuthNextjsServerProvider>
-      <SpeedInsights/>
-      <Analytics/>
-    </>
+    <ConvexAuthNextjsServerProvider>
+      <html lang="en">
+        <ReactLenis root>
+          <body className="antialiased">
+            <ConvexClientProvider>
+              <ScrollToTop />
+              {children}
+            </ConvexClientProvider>
+            <Toaster />
+            <SpeedInsights />
+            <Analytics />
+          </body>
+        </ReactLenis>
+      </html>
+    </ConvexAuthNextjsServerProvider>
   );
 }
