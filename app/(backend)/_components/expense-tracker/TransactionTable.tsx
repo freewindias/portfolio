@@ -49,7 +49,7 @@ export function TransactionTable({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="p-2 font-bold text-center text-white bg-rose-400">
+      <div className="p-2 font-bold text-center text-white bg-red-600">
         TRANSACTION
       </div>
       <Table className="border">
@@ -88,7 +88,7 @@ export function TransactionTable({
                   <SelectContent>
                     {categories.map((cat) => (
                       <SelectItem key={cat._id} value={cat._id}>
-                        {cat.name} ({cat.type})
+                        {cat.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

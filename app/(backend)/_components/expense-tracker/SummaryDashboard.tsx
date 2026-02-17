@@ -14,16 +14,24 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 interface SummaryDashboardProps {
   categories: Doc<"budgetCategories">[];
+  transactions: Doc<"transactions">[];
 }
 
 export function SummaryDashboard({
   categories,
+  transactions,
 }: SummaryDashboardProps) {
   const calculateTotal = (type: string, field: "planned" | "actual") => {
     const typeCats = categories.filter((c) => c.type === type);
     if (field === "planned") {
       return typeCats.reduce((acc, c) => acc + c.plannedAmount, 0);
     } else {
+      if (type === "expense") {
+        return transactions.reduce((acc, t) => {
+          const cat = typeCats.find(c => c._id === t.categoryId);
+          return acc + (cat ? t.amount : 0);
+        }, 0);
+      }
       return typeCats.reduce((acc, c) => acc + (c.actualAmount ?? 0), 0);
     }
   };

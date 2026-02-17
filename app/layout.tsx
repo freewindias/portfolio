@@ -33,12 +33,12 @@ export default function RootLayout({
                 {children}
               </ConvexClientProvider>
               <Toaster />
+              <SpeedInsights/>
+              <Analytics/>
             </body>
           </ReactLenis>
         </html>
       </ConvexAuthNextjsServerProvider>
-      <SpeedInsights/>
-      <Analytics/>
     </>
   );
 }

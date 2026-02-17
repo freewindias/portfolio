@@ -65,7 +65,7 @@ export default function Page() {
           </div>
         </CardHeader>
         <CardContent className="px-0">
-          {data && <SummaryDashboard categories={data.categories} />}
+          {data && <SummaryDashboard categories={data.categories} transactions={[]} />}
         </CardContent>
       </Card>
       

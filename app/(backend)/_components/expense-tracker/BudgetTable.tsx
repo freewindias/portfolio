@@ -22,6 +22,7 @@ interface BudgetTableProps {
   periodId: Id<"budgetPeriods">;
   categories: Doc<"budgetCategories">[];
   colorClass: string;
+  transactions?: Doc<"transactions">[];
 }
 
 export function BudgetTable({
@@ -30,12 +31,21 @@ export function BudgetTable({
   periodId,
   categories,
   colorClass,
+  transactions = [],
 }: BudgetTableProps) {
   const addCategory = useMutation(api.budget.addCategory);
   const updateCategory = useMutation(api.budget.updateCategory);
   const removeCategory = useMutation(api.budget.removeCategory);
 
-  const filteredCategories = categories.filter((c) => c.type === type);
+  const filteredCategories = categories.filter((c) => c.type === type).map(cat => {
+    if (type === "expense") {
+      const actual = transactions
+        .filter(t => t.categoryId === cat._id)
+        .reduce((sum, t) => sum + t.amount, 0);
+      return { ...cat, actualAmount: actual };
+    }
+    return cat;
+  });
 
   const totals = filteredCategories.reduce(
     (acc, c) => {
@@ -106,17 +116,23 @@ export function BudgetTable({
                 />
               </TableCell>
               <TableCell className="p-0 border-r border-slate-100 last:border-0">
-                <Input
-                  type="number"
-                  value={cat.actualAmount ?? 0}
-                  onChange={(e) =>
-                    updateCategory({
-                      id: cat._id,
-                      actualAmount: parseFloat(e.target.value) || 0,
-                    })
-                  }
-                  className="h-8 text-right border-none focus:ring-0 focus-visible:ring-0 text-[11px] font-bold"
-                />
+                {type === "expense" ? (
+                  <div className="h-8 flex items-center justify-end px-3 text-[11px] font-bold text-slate-900">
+                    {formatCurrency(cat.actualAmount ?? 0)}
+                  </div>
+                ) : (
+                  <Input
+                    type="number"
+                    value={cat.actualAmount ?? 0}
+                    onChange={(e) =>
+                      updateCategory({
+                        id: cat._id,
+                        actualAmount: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                    className="h-8 text-right border-none focus:ring-0 focus-visible:ring-0 text-[11px] font-bold"
+                  />
+                )}
               </TableCell>
               {(type === "bills" || type === "debt") && (
                 <TableCell className="p-0 text-center border-r border-slate-100 last:border-0">

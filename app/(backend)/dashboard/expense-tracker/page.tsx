@@ -44,6 +44,10 @@ export default function ExpenseTrackerPage() {
   }
 
   const { period, categories, transactions } = data;
+  const expenseCategories = categories.filter(c => c.type === "expense");
+  const expenseTransactions = transactions.filter(t => 
+    expenseCategories.some(cat => cat._id === t.categoryId)
+  );
 
   return (
     <div className="container mx-auto p-4 space-y-8 pb-10">
@@ -76,7 +80,7 @@ export default function ExpenseTrackerPage() {
         </div>
       </header>
 
-      <SummaryDashboard categories={categories} />
+      <SummaryDashboard categories={categories} transactions={transactions} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <BudgetTable
@@ -84,14 +88,14 @@ export default function ExpenseTrackerPage() {
           type="income"
           periodId={period._id}
           categories={categories}
-          colorClass="bg-red-400"
+          colorClass="bg-violet-400"
         />
         <BudgetTable
-          title="Expense"
-          type="expense"
+          title="Debt"
+          type="debt"
           periodId={period._id}
           categories={categories}
-          colorClass="bg-blue-400"
+          colorClass="bg-red-600"
         />
         <BudgetTable
           title="Bills"
@@ -105,23 +109,24 @@ export default function ExpenseTrackerPage() {
           type="savings"
           periodId={period._id}
           categories={categories}
-          colorClass="bg-emerald-400"
+          colorClass="bg-green-600"
         />
         <div className="lg:col-span-2">
            <BudgetTable
-            title="Debt"
-            type="debt"
+            title="Expense"
+            type="expense"
             periodId={period._id}
             categories={categories}
-            colorClass="bg-rose-400"
+            colorClass="bg-blue-400"
+            transactions={transactions}
           />
         </div>
       </div>
 
       <TransactionTable
         periodId={period._id}
-        categories={categories}
-        transactions={transactions}
+        categories={expenseCategories}
+        transactions={expenseTransactions}
       />
     </div>
   );
