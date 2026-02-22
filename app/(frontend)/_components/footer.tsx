@@ -14,6 +14,8 @@ export default function Footer() {
           width={100}
           height={100}
           className="rounded-xl"
+          loading="lazy"
+          fetchPriority="high"
         />
       }
     />

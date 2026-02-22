@@ -89,6 +89,8 @@ export default function ExpenseTrackerPage() {
           periodId={period._id}
           categories={categories}
           colorClass="bg-violet-400"
+          month={month}
+          year={year}
         />
         <BudgetTable
           title="Debt"
@@ -96,6 +98,8 @@ export default function ExpenseTrackerPage() {
           periodId={period._id}
           categories={categories}
           colorClass="bg-red-600"
+          month={month}
+          year={year}
         />
         <BudgetTable
           title="Bills"
@@ -103,6 +107,8 @@ export default function ExpenseTrackerPage() {
           periodId={period._id}
           categories={categories}
           colorClass="bg-orange-400"
+          month={month}
+          year={year}
         />
         <BudgetTable
           title="Savings"
@@ -110,6 +116,8 @@ export default function ExpenseTrackerPage() {
           periodId={period._id}
           categories={categories}
           colorClass="bg-green-600"
+          month={month}
+          year={year}
         />
         <div className="lg:col-span-2">
            <BudgetTable
@@ -119,6 +127,8 @@ export default function ExpenseTrackerPage() {
             categories={categories}
             colorClass="bg-blue-400"
             transactions={transactions}
+            month={month}
+            year={year}
           />
         </div>
       </div>
@@ -127,6 +137,8 @@ export default function ExpenseTrackerPage() {
         periodId={period._id}
         categories={expenseCategories}
         transactions={expenseTransactions}
+        month={month}
+        year={year}
       />
     </div>
   );

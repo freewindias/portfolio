@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { AmountInput } from "./AmountInput";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -26,15 +27,31 @@ interface TransactionTableProps {
   periodId: Id<"budgetPeriods">;
   categories: Doc<"budgetCategories">[];
   transactions: Doc<"transactions">[];
+  month: string;
+  year: number;
 }
 
 export function TransactionTable({
   periodId,
   categories,
   transactions,
+  month,
+  year,
 }: TransactionTableProps) {
   const addTransaction = useMutation(api.transactions.addTransaction);
-  const updateTransaction = useMutation(api.transactions.updateTransaction);
+  const updateTransaction = useMutation(api.transactions.updateTransaction).withOptimisticUpdate(
+    (localStore, args) => {
+      const currentData = localStore.getQuery(api.budget.getPeriodData, { month, year });
+      if (currentData) {
+        localStore.setQuery(api.budget.getPeriodData, { month, year }, {
+          ...currentData,
+          transactions: currentData.transactions.map((t) =>
+            t._id === args.id ? { ...t, ...args } : t
+          ),
+        });
+      }
+    }
+  );
   const removeTransaction = useMutation(api.transactions.removeTransaction);
 
   const handleAdd = async () => {
@@ -95,13 +112,12 @@ export function TransactionTable({
                 </Select>
               </TableCell>
               <TableCell className="p-1">
-                <Input
-                  type="number"
+                <AmountInput
                   value={t.amount}
-                  onChange={(e) =>
+                  onChange={(val) =>
                     updateTransaction({
                       id: t._id,
-                      amount: parseFloat(e.target.value) || 0,
+                      amount: val,
                     })
                   }
                   className="h-8 text-right border-none focus:ring-1"

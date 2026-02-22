@@ -52,6 +52,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 alt={project.title}
                 fill
                 className="object-contain"
+                loading="lazy"
+                fetchPriority="high"
               />
             </div>
             <div className="flex items-center justify-between bg-white py-2 px-2 border-t border-zinc-200">

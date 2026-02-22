@@ -49,7 +49,8 @@ export function SummaryDashboard({
   const actualMoneyLeft = actualIncome - actualExpenses;
 
   const plannedIncome = summary[0].planned;
-  const budgetLeft = plannedIncome - actualExpenses;
+  const plannedExpenses = summary.slice(1).reduce((acc, s) => acc + s.planned, 0);
+  const budgetLeft = plannedIncome - plannedExpenses;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-CA", {
@@ -64,7 +65,7 @@ export function SummaryDashboard({
   ];
 
   const budgetLeftData = [
-    { name: "Spent", value: actualExpenses },
+    { name: "Planned Spent", value: plannedExpenses },
     { name: "Remaining", value: Math.max(0, budgetLeft) },
   ];
 
@@ -93,46 +94,6 @@ export function SummaryDashboard({
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
-
-      <Card className="shadow-sm border-black flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
-        <CardHeader className="bg-slate-50 p-1.5 border-b border-black">
-          <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Actual Money Left</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 flex flex-col items-center justify-center relative pb-4">
-          <div className="w-full h-[180px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={moneyLeftData}
-                  innerRadius={55}
-                  outerRadius={75}
-                  paddingAngle={0}
-                  startAngle={90}
-                  endAngle={450}
-                  stroke="none"
-                  dataKey="value"
-                >
-                  <Cell fill="#ef4444" /> {/* Spent: Red */}
-                  <Cell fill="#3b82f6" /> {/* Balance: Blue */}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2 h-[180px]">
-            <span className="text-xl font-bold text-slate-900">{formatCurrency(actualMoneyLeft)}</span>
-          </div>
-          <div className="flex gap-4 px-4">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-[10px] font-bold text-slate-600">Balance</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-[10px] font-bold text-slate-600">Spent</span>
-            </div>
-          </div>
         </CardContent>
       </Card>
 
@@ -176,7 +137,45 @@ export function SummaryDashboard({
         </CardContent>
       </Card>
 
-
+      <Card className="shadow-sm border-black flex flex-col bg-white overflow-hidden p-0 gap-0 py-0">
+        <CardHeader className="bg-slate-50 p-1.5 border-b border-black">
+          <CardTitle className="text-2xl font-bold text-center text-slate-500 uppercase tracking-wider">Actual Money Left</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0 flex flex-col items-center justify-center relative pb-4">
+          <div className="w-full h-[180px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={moneyLeftData}
+                  innerRadius={55}
+                  outerRadius={75}
+                  paddingAngle={0}
+                  startAngle={90}
+                  endAngle={450}
+                  stroke="none"
+                  dataKey="value"
+                >
+                  <Cell fill="#ef4444" /> {/* Spent: Red */}
+                  <Cell fill="#3b82f6" /> {/* Balance: Blue */}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2 h-[180px]">
+            <span className="text-xl font-bold text-slate-900">{formatCurrency(actualMoneyLeft)}</span>
+          </div>
+          <div className="flex gap-4 px-4">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="text-[10px] font-bold text-slate-600">Balance</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+              <span className="text-[10px] font-bold text-slate-600">Spent</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

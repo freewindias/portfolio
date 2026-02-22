@@ -23,6 +23,8 @@ export default function SignIn() {
             width={120}
             height={120}
             className="rounded-xl shadow-lg"
+            loading="lazy"
+            fetchPriority="high"
           />
         </div>
         <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-200">

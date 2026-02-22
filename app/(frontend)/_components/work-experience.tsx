@@ -96,6 +96,8 @@ export function ExperienceItem({
               quality={100}
               className="rounded-full"
               unoptimized
+              loading="lazy"
+              fetchPriority="high"
             />
           ) : (
             <span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />

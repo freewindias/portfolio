@@ -85,7 +85,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               alt={project.title}
               fill
               className="object-contain"
-              priority
+              loading="lazy"
+              fetchPriority="high"
             />
           </div>
           {project.heroImageCaption && (
@@ -125,6 +126,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   alt={`${project.title} - Image ${index + 1}`}
                   fill
                   className="object-contain"
+                  loading="lazy"
+                  fetchPriority="high"
                 />
               </div>
             ))}

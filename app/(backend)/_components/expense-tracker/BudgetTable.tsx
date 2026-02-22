@@ -23,7 +23,11 @@ interface BudgetTableProps {
   categories: Doc<"budgetCategories">[];
   colorClass: string;
   transactions?: Doc<"transactions">[];
+  month: string;
+  year: number;
 }
+
+import { AmountInput } from "./AmountInput";
 
 export function BudgetTable({
   title,
@@ -32,9 +36,23 @@ export function BudgetTable({
   categories,
   colorClass,
   transactions = [],
+  month,
+  year,
 }: BudgetTableProps) {
   const addCategory = useMutation(api.budget.addCategory);
-  const updateCategory = useMutation(api.budget.updateCategory);
+  const updateCategory = useMutation(api.budget.updateCategory).withOptimisticUpdate(
+    (localStore, args) => {
+      const currentData = localStore.getQuery(api.budget.getPeriodData, { month, year });
+      if (currentData) {
+        localStore.setQuery(api.budget.getPeriodData, { month, year }, {
+          ...currentData,
+          categories: currentData.categories.map((c) =>
+            c._id === args.id ? { ...c, ...args } : c
+          ),
+        });
+      }
+    }
+  );
   const removeCategory = useMutation(api.budget.removeCategory);
 
   const filteredCategories = categories.filter((c) => c.type === type).map(cat => {
@@ -103,13 +121,12 @@ export function BudgetTable({
                 />
               </TableCell>
               <TableCell className="p-0 border-r border-slate-100 last:border-0">
-                <Input
-                  type="number"
+                <AmountInput
                   value={cat.plannedAmount}
-                  onChange={(e) =>
+                  onChange={(val) =>
                     updateCategory({
                       id: cat._id,
-                      plannedAmount: parseFloat(e.target.value) || 0,
+                      plannedAmount: val,
                     })
                   }
                   className="h-8 text-right border-none focus:ring-0 focus-visible:ring-0 text-[11px]"
@@ -121,13 +138,12 @@ export function BudgetTable({
                     {formatCurrency(cat.actualAmount ?? 0)}
                   </div>
                 ) : (
-                  <Input
-                    type="number"
+                  <AmountInput
                     value={cat.actualAmount ?? 0}
-                    onChange={(e) =>
+                    onChange={(val) =>
                       updateCategory({
                         id: cat._id,
-                        actualAmount: parseFloat(e.target.value) || 0,
+                        actualAmount: val,
                       })
                     }
                     className="h-8 text-right border-none focus:ring-0 focus-visible:ring-0 text-[11px] font-bold"
