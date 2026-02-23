@@ -1,16 +1,16 @@
 "use client";
 
-import { Doc, Id } from "@/convex/_generated/dataModel";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@/components/ui/table";
+import { Doc } from "@/convex/_generated/dataModel";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 interface SummaryDashboardProps {
   categories: Doc<"budgetCategories">[];

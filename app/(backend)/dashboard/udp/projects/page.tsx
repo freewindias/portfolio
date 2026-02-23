@@ -1,19 +1,19 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import Link from "next/link";
-import { TrashIcon, PlusIcon, PencilIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { api } from "@/convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
+import { PencilIcon, PlusIcon, TrashIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function ProjectsAdminPage() {
   const projects = useQuery(api.projects.list, {});

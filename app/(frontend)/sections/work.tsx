@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
-import { audiowide } from "@/font";
-import ProjectCard from "../_components/project-card";
+import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
+import { audiowide } from "@/font";
 import { fetchQuery } from "convex/nextjs";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import ProjectCard from "../_components/project-card";
 
 export default async function Work() {
   const projects = await fetchQuery(api.projects.list, { featured: true });

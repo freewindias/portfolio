@@ -1,9 +1,9 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import ProfileForm from "@/app/(backend)/_components/profile-form";
 import { Separator } from "@/components/ui/separator";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 
 export default function ProfilePage() {
   const user = useQuery(api.users.currentUser);

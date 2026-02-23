@@ -1,10 +1,10 @@
 "use client";
 
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
-import { audiowide } from "@/font";
-import { educationItemType, Workeducation } from "../_components/education-compo";
-import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { audiowide } from "@/font";
+import { useQuery } from "convex/react";
+import { educationItemType, Workeducation } from "../_components/education-compo";
 
 export default function Education() {
   const educationData = useQuery(api.education.get);

@@ -1,33 +1,21 @@
 "use client";
 
-import { useEditor, EditorContent, Editor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { Button } from "@/components/ui/button";
+import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
+import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
-import Image from "@tiptap/extension-image";
+import { Editor, EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import {
-  Bold,
-  Italic,
-  Underline as UnderlineIcon,
-  Strikethrough,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
-  List,
-  ListOrdered,
-  Quote,
-  Code,
-  Undo,
-  Redo,
-  Heading1,
-  Heading2,
-  Heading3,
+    AlignCenter, AlignJustify, AlignLeft, AlignRight, Bold, Code, Heading1,
+    Heading2,
+    Heading3, Italic, List,
+    ListOrdered,
+    Quote, Redo, Strikethrough, Underline as UnderlineIcon, Undo
 } from "lucide-react";
-import { Toggle } from "@/components/ui/toggle";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 interface RichTextEditorProps {
   value: string;

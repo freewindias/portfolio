@@ -1,13 +1,9 @@
-import React, { MouseEvent } from "react";
-import {
-  SiUnrealengine,
-  SiNextdotjs,
-  SiFigma,
-  SiCplusplus,
-  SiGithub,
-} from "react-icons/si";
 import { motion, useAnimate } from "motion/react";
+import { MouseEvent } from "react";
 import { IconType } from "react-icons";
+import {
+    SiCplusplus, SiFigma, SiGithub, SiNextdotjs, SiUnrealengine
+} from "react-icons/si";
 
 const ConvexIcon = ({ className }: { className?: string }) => (
   <svg

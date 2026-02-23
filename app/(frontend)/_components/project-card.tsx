@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowUpRight } from "lucide-react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import React, { useRef } from "react";
 
 interface ProjectCardProps {
   project: {

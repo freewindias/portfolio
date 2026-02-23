@@ -1,10 +1,13 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
 
 // Generate upload URL for images
-export const generateUploadUrl = mutation(async (ctx) => {
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
   return await ctx.storage.generateUploadUrl();
+}
 });
 
 export const getStorageUrl = query({

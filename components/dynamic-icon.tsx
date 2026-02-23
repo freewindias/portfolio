@@ -1,8 +1,7 @@
 "use client";
 
-import React, { FC, Suspense, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { IconContext } from "react-icons";
-import { Loader2Icon } from "lucide-react";
 
 // Types for the dynamic icon props
 interface DynamicIconProps extends React.ComponentProps<"svg"> {

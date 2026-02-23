@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth } from "convex/react";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 const INACTIVITY_TIMEOUT = 3 * 60 * 1000; // 2 minutes in milliseconds
 

@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
-import ReactLenis from "lenis/react";
 import ScrollToTop from "@/components/ScrollToTop";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import ReactLenis from "lenis/react";
+import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
+import "./globals.css";
 
 
 export const metadata: Metadata = {

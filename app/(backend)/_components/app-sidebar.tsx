@@ -1,23 +1,23 @@
 "use client"
 
-import * as React from "react"
 import {
-  IconInnerShadowTop,
+    IconInnerShadowTop
 } from "@tabler/icons-react"
+import * as React from "react"
 
 import { NavUser } from "@/app/(backend)/_components/nav-user"
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 

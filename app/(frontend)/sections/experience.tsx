@@ -1,10 +1,10 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
+import { api } from "@/convex/_generated/api";
 import { audiowide } from "@/font";
-import { ExperienceItemType, WorkExperience } from "../_components/work-experience";
+import { useQuery } from "convex/react";
+import { WorkExperience } from "../_components/work-experience";
 
 
 export default function Experience() {

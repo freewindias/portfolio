@@ -1,13 +1,13 @@
-import React from 'react';
 import { cn } from '@/lib/utils';
-import { motion, useReducedMotion } from 'motion/react';
 import {
-	FacebookIcon,
-	FrameIcon,
-	InstagramIcon,
-	LinkedinIcon,
-	YoutubeIcon,
+    FacebookIcon,
+    FrameIcon,
+    InstagramIcon,
+    LinkedinIcon,
+    YoutubeIcon
 } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
+import React from 'react';
 import { Button } from './button';
 
 interface FooterLink {

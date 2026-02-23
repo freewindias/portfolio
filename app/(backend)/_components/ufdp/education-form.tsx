@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { PlusIcon, TrashIcon } from "lucide-react";
 import RichTextEditor from "@/components/ui/rich-text-editor";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { PlusIcon, TrashIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 // Helper for generating IDs
 const generateId = () => crypto.randomUUID();

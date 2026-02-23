@@ -2,13 +2,13 @@
 
 import VerticalCutReveal from '@/components/fancy/vertical-cut-reveal'
 import { audiowide } from '@/font'
-import { useEffect, useRef } from 'react'
 import ICON from "@/public/heroIcons/coffee.json"
-import { Player } from "@lordicon/react"
-import { motion } from "motion/react";
-import Linkedin from "@/public/heroIcons/linkedin.json"
 import Github from "@/public/heroIcons/github.json"
+import Linkedin from "@/public/heroIcons/linkedin.json"
+import { Player } from "@lordicon/react"
+import { motion } from "motion/react"
 import Link from "next/link"
+import { useEffect, useRef } from 'react'
 
 
 export default function Hero() {

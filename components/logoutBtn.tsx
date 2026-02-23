@@ -1,9 +1,9 @@
 "use client";
 
-import React from 'react'
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useRouter } from "next/navigation";
 import { useConvexAuth } from "convex/react";
+import { useRouter } from "next/navigation";
+import React from 'react';
 
 import { cn } from "@/lib/utils";
 

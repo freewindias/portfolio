@@ -1,10 +1,10 @@
 "use client";
 
-import React from 'react'
-import { AppSidebar } from "@/app/(backend)/_components/app-sidebar"
-import { SiteHeader } from "@/app/(backend)/_components/site-header"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { useInactivityLogout } from "@/hooks/useInactivityLogout"
+import { AppSidebar } from "@/app/(backend)/_components/app-sidebar";
+import { SiteHeader } from "@/app/(backend)/_components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { useInactivityLogout } from "@/hooks/useInactivityLogout";
+import React from 'react';
 
 export default function BackendLayout({ children }: { children: React.ReactNode }) {
   // Monitor user activity and auto-logout after 5 minutes of inactivity

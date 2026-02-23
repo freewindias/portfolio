@@ -1,11 +1,10 @@
-import React from 'react';
-import { api } from '@/convex/_generated/api';
-import { fetchQuery } from 'convex/nextjs';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { api } from '@/convex/_generated/api';
 import { audiowide } from '@/font';
+import { fetchQuery } from 'convex/nextjs';
+import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface ProjectPageProps {

@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
-import Link from "next/link";
-import {
-  NotepadTextDashed,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+    NotepadTextDashed
+} from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
 interface FooterProps {
   brandName?: string;

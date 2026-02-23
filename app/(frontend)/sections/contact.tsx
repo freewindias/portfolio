@@ -2,14 +2,14 @@
 
 import VerticalCutReveal from "@/components/fancy/vertical-cut-reveal";
 import { audiowide } from "@/font";
-import { useEffect, useRef } from 'react'
-import { Player } from "@lordicon/react"
+import Github from "@/public/heroIcons/github.json";
+import Linkedin from "@/public/heroIcons/linkedin.json";
+import Mail from "@/public/heroIcons/mail.json";
+import Map from "@/public/heroIcons/map.json";
+import { Player } from "@lordicon/react";
 import { motion, useInView } from "motion/react";
-import Link from "next/link"
-import Map from "@/public/heroIcons/map.json"
-import Mail from "@/public/heroIcons/mail.json"
-import Linkedin from "@/public/heroIcons/linkedin.json"
-import Github from "@/public/heroIcons/github.json"
+import Link from "next/link";
+import { useEffect, useRef } from 'react';
 
 export default function Contact() {
   const containerRef = useRef(null);

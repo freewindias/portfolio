@@ -1,20 +1,20 @@
 import {
-  BriefcaseBusinessIcon,
-  ChevronsDownUpIcon,
-  ChevronsUpDownIcon,
-  CodeXmlIcon,
-  DraftingCompassIcon,
-  GraduationCapIcon,
+    BriefcaseBusinessIcon,
+    ChevronsDownUpIcon,
+    ChevronsUpDownIcon,
+    CodeXmlIcon,
+    DraftingCompassIcon,
+    GraduationCapIcon
 } from "lucide-react";
-import Image from "next/image";
 import { motion } from "motion/react";
+import Image from "next/image";
 import React from "react";
 
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger
 } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";

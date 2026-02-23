@@ -1,8 +1,8 @@
 "use client"
 
-import { ActivityCalendar } from 'react-activity-calendar';
 import { useTheme } from 'next-themes';
-import { useEffect, useState, cloneElement } from 'react';
+import { cloneElement, useEffect, useState } from 'react';
+import { ActivityCalendar } from 'react-activity-calendar';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 

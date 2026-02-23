@@ -1,10 +1,10 @@
 
-import Hero from './sections/hero';
-import Work from './sections/work';
-import Experience from './sections/experience';
-import Education from './sections/education';
-import TechStack from './sections/techstack';
 import Contact from './sections/contact';
+import Education from './sections/education';
+import Experience from './sections/experience';
+import Hero from './sections/hero';
+import TechStack from './sections/techstack';
+import Work from './sections/work';
 
 
 export default function Home() {

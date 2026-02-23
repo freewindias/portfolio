@@ -1,9 +1,9 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import EducationForm from "@/app/(backend)/_components/ufdp/education-form";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import EducationForm from "@/app/(backend)/_components/ufdp/education-form";
+import { useQuery } from "convex/react";
 import { use } from "react";
 
 export default function EditEducationPage({ params }: { params: Promise<{ id: string }> }) {

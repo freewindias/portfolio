@@ -2,13 +2,13 @@
 
 import { AnimationOptions, motion, useInView } from "motion/react"
 import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
+    forwardRef,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState
 } from "react"
 
 import { cn } from "@/lib/utils"

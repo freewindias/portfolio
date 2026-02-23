@@ -1,25 +1,25 @@
 "use client"
 
 import {
-  IconLogout,
+    IconLogout
 } from "@tabler/icons-react"
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+    Avatar,
+    AvatarFallback,
+    AvatarImage
 } from "@/components/ui/avatar"
 
 import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem
 } from "@/components/ui/sidebar"
 
 import LogoutBtn from "@/components/logoutBtn"
 
-import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
 
 export function NavUser() {
   const user = useQuery(api.users.currentUser)

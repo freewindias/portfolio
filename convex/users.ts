@@ -1,7 +1,7 @@
-import { query, mutation, action } from "./_generated/server";
-import { api } from "./_generated/api";
-import { getAuthUserId, retrieveAccount, modifyAccountCredentials } from "@convex-dev/auth/server";
+import { getAuthUserId, modifyAccountCredentials, retrieveAccount } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import { api } from "./_generated/api";
+import { action, mutation, query } from "./_generated/server";
 
 export const currentUser = query({
   args: {},

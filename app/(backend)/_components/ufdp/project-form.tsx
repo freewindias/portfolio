@@ -1,36 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import RichTextEditor from "@/components/ui/rich-text-editor";
+import { Textarea } from "@/components/ui/textarea";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
 import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
+    closestCenter, DndContext, DragEndEvent, KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
 } from "@dnd-kit/core";
 import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useMutation, useQuery } from "convex/react";
 import { EyeIcon, GripVerticalIcon, TrashIcon } from "lucide-react";
 import NextImage from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type ProjectData = {
   title: string;
