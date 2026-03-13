@@ -6,10 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function SignIn() {
   const { signIn } = useAuthActions();
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -36,12 +36,11 @@ export default function SignIn() {
         onSubmit={(e) => {
           e.preventDefault();
           setLoading(true);
-          setError(null);
           const formData = new FormData(e.target as HTMLFormElement);
           formData.set("flow", "signIn");
           void signIn("password", formData)
             .catch((error) => {
-              setError(error.message);
+              toast.error("Something went wrong. Please try again.");
               setLoading(false);
             })
             .then(() => {
@@ -73,14 +72,6 @@ export default function SignIn() {
         >
           {loading ? "Loading..." : "Login"}
         </button>
-
-        {error && (
-          <div className="bg-rose-500/10 border border-rose-500/30 dark:border-rose-500/50 rounded-lg p-4">
-            <p className="text-rose-700 dark:text-rose-300 font-medium text-sm wrap-break-word">
-              {error}
-            </p>
-          </div>
-        )}
       </form>
       
       <Link 

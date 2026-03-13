@@ -18,7 +18,7 @@ import { Plus, Trash2 } from "lucide-react";
 
 interface BudgetTableProps {
   title: string;
-  type: "income" | "expense" | "bills" | "savings" | "debt";
+  type: "income" | "debit card expense" | "credit card expense" | "bills" | "savings" | "debt";
   periodId: Id<"budgetPeriods">;
   categories: Doc<"budgetCategories">[];
   colorClass: string;
@@ -56,7 +56,7 @@ export function BudgetTable({
   const removeCategory = useMutation(api.budget.removeCategory);
 
   const filteredCategories = categories.filter((c) => c.type === type).map(cat => {
-    if (type === "expense") {
+    if (type === "debit card expense" || type === "credit card expense") {
       const actual = transactions
         .filter(t => t.categoryId === cat._id)
         .reduce((sum, t) => sum + t.amount, 0);
@@ -133,7 +133,7 @@ export function BudgetTable({
                 />
               </TableCell>
               <TableCell className="p-0 border-r border-slate-100 last:border-0">
-                {type === "expense" ? (
+                {(type === "debit card expense" || type === "credit card expense") ? (
                   <div className="h-8 flex items-center justify-end px-3 text-[11px] font-bold text-slate-900">
                     {formatCurrency(cat.actualAmount ?? 0)}
                   </div>

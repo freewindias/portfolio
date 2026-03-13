@@ -58,7 +58,8 @@ export const addCategory = mutation({
     periodId: v.id("budgetPeriods"),
     type: v.union(
       v.literal("income"),
-      v.literal("expense"),
+      v.literal("debit card expense"),
+      v.literal("credit card expense"),
       v.literal("bills"),
       v.literal("savings"),
       v.literal("debt")

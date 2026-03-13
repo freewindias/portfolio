@@ -43,7 +43,7 @@ export default function ExpenseTrackerPage() {
   }
 
   const { period, categories, transactions } = data;
-  const expenseCategories = categories.filter(c => c.type === "expense");
+  const expenseCategories = categories.filter(c => c.type === "debit card expense" || c.type === "credit card expense");
   const expenseTransactions = transactions.filter(t => 
     expenseCategories.some(cat => cat._id === t.categoryId)
   );
@@ -118,18 +118,26 @@ export default function ExpenseTrackerPage() {
           month={month}
           year={year}
         />
-        <div className="lg:col-span-2">
-           <BudgetTable
-            title="Expense"
-            type="expense"
-            periodId={period._id}
-            categories={categories}
-            colorClass="bg-blue-400"
-            transactions={transactions}
-            month={month}
-            year={year}
-          />
-        </div>
+        <BudgetTable
+          title="Debit Card Expense"
+          type="debit card expense"
+          periodId={period._id}
+          categories={categories}
+          colorClass="bg-blue-400"
+          transactions={transactions}
+          month={month}
+          year={year}
+        />
+        <BudgetTable
+          title="Credit Card Expense"
+          type="credit card expense"
+          periodId={period._id}
+          categories={categories}
+          colorClass="bg-indigo-400"
+          transactions={transactions}
+          month={month}
+          year={year}
+        />
       </div>
 
       <TransactionTable

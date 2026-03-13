@@ -55,6 +55,11 @@ export default defineSchema({
     description: v.optional(v.string()), // Short description
   }).index("by_slug", ["slug"]),
 
+  settings: defineTable({
+    creditLimit: v.number(),
+    previousCreditSpent: v.optional(v.number()),
+  }),
+
   budgetPeriods: defineTable({
     month: v.string(),
     year: v.number(),
@@ -65,7 +70,8 @@ export default defineSchema({
     periodId: v.id("budgetPeriods"),
     type: v.union(
       v.literal("income"),
-      v.literal("expense"),
+      v.literal("debit card expense"),
+      v.literal("credit card expense"),
       v.literal("bills"),
       v.literal("savings"),
       v.literal("debt")

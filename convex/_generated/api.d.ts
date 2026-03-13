@@ -14,6 +14,7 @@ import type * as education from "../education.js";
 import type * as experience from "../experience.js";
 import type * as http from "../http.js";
 import type * as projects from "../projects.js";
+import type * as settings from "../settings.js";
 import type * as transactions from "../transactions.js";
 import type * as users from "../users.js";
 
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   experience: typeof experience;
   http: typeof http;
   projects: typeof projects;
+  settings: typeof settings;
   transactions: typeof transactions;
   users: typeof users;
 }>;
