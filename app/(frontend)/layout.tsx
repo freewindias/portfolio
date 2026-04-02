@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "./sections/footer";
 
 
 export default function PublicLayout({
@@ -9,6 +10,7 @@ export default function PublicLayout({
   return (
     <main>
       {children}
+      <Footer />
     </main>
   );
 }
