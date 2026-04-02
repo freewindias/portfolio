@@ -22,8 +22,6 @@ export default function Home() {
       <Divider/>
       <Education/>
       <Divider/>
-      <ProjectOverview/>
-      <Divider/>
       <Footer/>
     </>
   )

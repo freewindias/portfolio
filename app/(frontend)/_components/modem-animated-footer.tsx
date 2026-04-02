@@ -1,8 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import {
-    NotepadTextDashed
-} from "lucide-react";
+import { NotepadTextDashed } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -23,7 +21,7 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <section className={cn("relative w-full mt-0 overflow-hidden", className)}>
-      <footer className="bg-background relative">
+      <footer className="bg-background">
         <div className="container">
           <div className="border-x border-border relative">
             <div className="max-w-7xl flex flex-col justify-between mx-auto min-h-80 sm:min-h-72 md:min-h-80 relative p-4 py-10">
