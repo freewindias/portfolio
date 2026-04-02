@@ -1,23 +1,18 @@
-"use client";
-import { useEffect, useState } from "react";
+
+const educationData = [
+  {
+    date: "Jan 2026 - Sept 2027",
+    title: "Master's of Science in Applied Computer Science",
+    subtitle: "Fairleigh Dickinson University — Vancouver, BC"
+  },
+  {
+    date: "July 2020 - June 2024",
+    title: "Bachelor's in Computer Engineering",
+    subtitle: "St. John College of Engineering & Management - Mumbai, IN"
+  },
+];
 
 const Education = () => {
-  const [educationData, setEducationData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/page-data");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setEducationData(data?.educationData);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <section>
@@ -54,7 +49,7 @@ const Education = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2 flex-1 sm:pl-16 ml-2 sm:ml-0">
+                    <div className="flex flex-col gap-2 flex-1 sm:pl-10 ml-2 sm:ml-0">
                       <h5 className="font-semibold">{item.title}</h5>
                       <p className="text-primary">{item.subtitle}</p>
                     </div>

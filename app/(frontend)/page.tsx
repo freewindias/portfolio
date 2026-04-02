@@ -1,12 +1,12 @@
+"use client"
+
 import React from 'react'
-import HeroSection from './_components/home/hero-section'
-import AboutMe from './_components/home/about-me'
-import FeaturedWork from './_components/home/featured-work'
-import Experience from './_components/home/experience'
-import Education from './_components/home/education'
+import HeroSection from './sections/hero'
+import AboutMe from './sections/about'
+import FeaturedWork from './sections/featuredwork'
+import Experience from './sections/experience'
+import Education from './sections/education'
 import Divider from './_components/divider'
-import Footer from './_components/footer'
-import ProjectOverview from './_components/home/project-overview'
 
 
 export default function Home() {
@@ -22,7 +22,6 @@ export default function Home() {
       <Divider/>
       <Education/>
       <Divider/>
-      <Footer/>
     </>
   )
 }

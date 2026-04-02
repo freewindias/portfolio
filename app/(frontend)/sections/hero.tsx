@@ -1,25 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { FiMail, FiDownload, FiMapPin } from "react-icons/fi";
+
+const socialIcons = [
+  {
+    icon: <FiMail size={20} />,
+    href: "mailto:[EMAIL_ADDRESS]",
+    name: "Mail",
+  },
+  {
+    icon: <FaLinkedinIn size={20} />,
+    href: "https://linkedin.com/in/freewindias",
+    name: "LinkedIn",
+    target: "_blank",
+  },
+  {
+    icon: <FaGithub size={20} />,
+    href: "https://github.com/freewindias",
+    name: "GitHub",
+    target: "_blank",
+  },
+];
 
 const HeroSection = () => {
-  const socialIcon = [
-    {
-      img: "/images/icon/twitter-icon.svg",
-      href: "https://twitter.com",
-      icon: "Twitter",
-    },
-    {
-      img: "/images/icon/behance-icon.svg",
-      href: "https://behance.com",
-      icon: "Behance",
-    },
-    {
-      img: "/images/icon/dribble-icon.svg",
-      href: "https://dribble.com",
-      icon: "Dribble",
-    },
-  ];
   return (
     <section>
       <div className="container">
@@ -30,7 +35,7 @@ const HeroSection = () => {
               alt="banner-img"
               width={1080}
               height={267}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover border-x border-border"
             />
           </div>
           <div className="border-x border-border">
@@ -46,53 +51,43 @@ const HeroSection = () => {
                 <span className="absolute bottom-2.5 right-5 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
               </div>
               <div className="flex flex-col gap-2 sm:gap-3 items-center text-center xs:items-start">
-                <h1>Elena Marsh</h1>
+                <h1>Freewin Dias</h1>
                 <p className="text-violet-700 font-normal">
-                  Senior UI & UX Designer
+                  Game & Web Developer
                 </p>
                 <div className="flex items-center gap-2">
-                  <Image
-                    src={"/images/icon/map-icon.svg"}
-                    alt="map-icon"
-                    width={20}
-                    height={20}
-                  />
-                  <p className="text-primary">Brooklyn, NYC</p>
+                  <FiMapPin size={20} />
+                  <p className="text-primary">Vancouver, BC</p>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row items-center gap-4">
                 <div className="flex items-center gap-2">
-                  {socialIcon?.map((value, index) => {
+                  {socialIcons?.map((value: any, index: number) => {
                     return (
                       <Link
                         href={value?.href}
                         key={index}
-                        className="w-fit p-2.5 sm:p-3.5 hover:bg-primary/5 border border-border rounded-full"
+                        target={value.target}
+                        rel={value.target === "_blank" ? "noopener noreferrer" : undefined}
+                        className="w-fit p-2.5 sm:p-3.5 hover:bg-primary/5 border border-border rounded-full transition-colors"
+                        title={value.name}
                       >
-                        <Image
-                          src={value?.img}
-                          alt={value?.icon}
-                          width={18}
-                          height={18}
-                        />
+                        {value.icon}
                       </Link>
                     );
                   })}
                 </div>
                 <Button className="h-auto rounded-full p-0">
                   <Link
-                    href="#"
-                    className="inline-block p-0.5 rounded-full bg-[linear-gradient(96.09deg,_#9282F8_12.17%,_#F3CA4D_90.71%)]"
+                    href="/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block p-0.5 rounded-full bg-[linear-gradient(96.09deg,#9282F8_12.17%,#F3CA4D_90.71%)]"
                   >
-                    <span className="flex items-center gap-3 bg-primary hover:bg-[linear-gradient(96.09deg,_#9282F8_12.17%,_#F3CA4D_90.71%)] py-2.5 px-5 rounded-full">
-                      <Image
-                        src="/images/icon/spark-icon.svg"
-                        alt="spark-icon"
-                        width={14}
-                        height={14}
-                      />
+                    <span className="flex items-center gap-3 bg-primary hover:bg-[linear-gradient(96.09deg,#9282F8_12.17%,#F3CA4D_90.71%)] py-2.5 px-5 rounded-full transition-colors">
+                      <FiDownload size={28} className="text-white" />
                       <span className="text-sm sm:text-base font-semibold text-white">
-                        Get in touch
+                        Resume
                       </span>
                     </span>
                   </Link>

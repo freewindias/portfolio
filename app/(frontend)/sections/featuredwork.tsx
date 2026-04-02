@@ -1,26 +1,23 @@
-"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+const featureWork = [
+  {
+    title: "Branding + Web Design for Cleaning Services",
+    description: "Developed a modern brand identity and a responsive web experience tailored for a professional cleaning company, focused on clarity and usability.",
+    roles: ["UX Designer", "Framer Designer"],
+    image: "/images/feature-work/feature-img-1.png"
+  },
+  {
+    title: "Brand Identity for a Health Care Company",
+    description: "Created a distinctive visual identity and design language to build trust and empathy for a forward-thinking health care provider.",
+    roles: ["UX Designer", "Framer Designer"],
+    image: "/images/feature-work/feature-img-2.png"
+  }
+];
 
 const FeaturedWork = () => {
-  const [featureWork, setFeatureWork] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/featured-work");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setFeatureWork(data?.featureWork);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <section>
@@ -35,7 +32,7 @@ const FeaturedWork = () => {
                 variant={"outline"}
                 className="h-auto py-3 px-5"
                 nativeButton={false}
-                render={<Link href={"/"}>Download Portfolio</Link>}
+                render={<Link href={"/"}>View all my work</Link>}
               />
             </div>
           </div>

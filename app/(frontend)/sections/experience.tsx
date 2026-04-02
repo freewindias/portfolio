@@ -1,24 +1,35 @@
-"use client";
+
 import Image from "next/image";
-import { useEffect, useState } from "react";
+
+const experienceData = [
+  {
+    icon: "/images/icon/tailwind-icon.svg",
+    role: "Product Designer, Tailwind",
+    location: "Remote",
+    startYear: "2022",
+    endYear: "Present",
+    bulletPoints: [
+      "Led end-to-end redesign of dashboard UI, improving user retention by 23%",
+      "Collaborated with engineers and product managers to ship features faster",
+      "Designed components used in a system adopted by 4+ internal teams"
+    ]
+  },
+  {
+    icon: "/images/icon/asana-icon.svg",
+    role: "IT Support - Our Lady of Nazareth School",
+    location: "Mumbai, IN",
+    startYear: "2019",
+    endYear: "2022",
+    bulletPoints: [
+      "Created design systems for client projects across finance and healthcare",
+      "Conducted user testing and research to validate designs",
+      "Helped junior designers grow via mentorship",
+    ]
+  },
+];
+
 
 const Experience = () => {
-  const [experienceData, setExperienceData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/page-data");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setExperienceData(data?.experienceData);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <section>
