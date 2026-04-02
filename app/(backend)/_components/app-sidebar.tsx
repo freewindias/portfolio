@@ -16,11 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-
-  CommandIcon,
-} from "@hugeicons/core-free-icons";
+import { Command } from "lucide-react";
 import Link from "next/link";
 
 const data = {
@@ -85,14 +81,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="#" />}
+              render={<Link href="/" />}
             >
-              <HugeiconsIcon
-                icon={CommandIcon}
+              <Command
                 strokeWidth={2}
                 className="size-5!"
               />
-              <Link href="/" className="text-base font-semibold">Freewin Dias Portfolio</Link>
+              <span className="text-base font-semibold">Freewin Dias Portfolio</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -109,8 +104,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuSub>
                     {item.items.map((item) => (
                       <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild>
-                          <Link href={item.url}>{item.title}</Link>
+                        <SidebarMenuSubButton render={<Link href={item.url} />}>
+                          {item.title}
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
