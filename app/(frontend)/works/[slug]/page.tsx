@@ -1,0 +1,140 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { projects } from "@/lib/projects";
+import { Button } from "@/components/ui/button";
+import Divider from "../../_components/divider";
+
+const ProjectDetailPage = () => {
+  const { slug } = useParams();
+  const project = projects.find((p) => p.slug === slug);
+
+  if (!project) {
+    return (
+      <div className="container py-20 text-center">
+        <h2 className="text-2xl font-bold">Project not found</h2>
+        <Button variant={"outline"} className="mt-5" render={<Link href="/works">Back to all works!</Link>} />
+      </div>
+    );
+  }
+
+  return (
+    <main className="min-h-screen">
+      <Divider />
+      <section>
+        <div className="container">
+          <div className="border-x border-border">
+            {/* Header Section */}
+            <div className="flex flex-col max-w-3xl mx-auto py-10 px-4 sm:px-7">
+              <div className="flex flex-col xs:flex-row gap-5 items-center justify-between">
+                <p className="text-sm tracking-[2px] text-primary uppercase font-medium">
+                  Project Overview
+                </p>
+                <Button
+                  variant={"outline"}
+                  className="h-auto py-3 px-5 transition-all duration-300"
+                  nativeButton={false}
+                  render={<Link href={"/works"}>Back to all works!</Link>}
+                />
+              </div>
+            </div>
+
+            {/* Main Image */}
+            <div className="border-t border-border overflow-hidden">
+              <Image
+                src={project.image}
+                alt={project.title}
+                width={1200}
+                height={600}
+                className="w-full h-auto object-cover"
+                priority
+              />
+            </div>
+
+            {/* Title, Category & Description Section */}
+            <div className="flex flex-col gap-10 p-6 md:p-14 border-t border-border">
+              <div>
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
+                  {project.title}
+                </h1>
+              </div>
+              
+              <div className="flex flex-col gap-12">
+                {/* Details Grid */}
+                <div className="flex flex-col gap-8">
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Category</p>
+                    <p className="text-xl mt-2">{project.category}</p>
+                  </div>
+
+                  <div className="flex flex-col gap-8 border-t border-border/50 pt-8">
+                    <div>
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Client</p>
+                      <p className="text-lg mt-2 font-medium">{project.client}</p>
+                    </div>
+                    
+                    {/* Year & Website Grid */}
+                    <div className="grid grid-cols-2 gap-8 border-t border-border/50 pt-8">
+                      <div>
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Year</p>
+                        <p className="text-lg mt-2 font-medium">{project.year}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">View project</p>
+                        <Link 
+                          href={project.website} 
+                          target="_blank" 
+                          className="text-lg mt-2 font-medium hover:underline flex items-center gap-1 transition-all"
+                        >
+                          Visit Website
+                          <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="border-t border-border/50 pt-8">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Description</p>
+                  <p className="mt-4 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-4xl">
+                    {project.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Images Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 border-t border-border">
+              {project.additionalImages.map((image, index) => {
+                const isRightCol = index % 2 === 1;
+                const isFirstRow = index < 2;
+
+                return (
+                  <div
+                    key={index}
+                    className={`overflow-hidden border-border ${isRightCol ? "md:border-l" : ""} ${isFirstRow ? "border-b" : index < 2 ? "" : index === 2 ? "border-b md:border-b-0" : ""}`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${project.title} - ${index + 1}`}
+                      width={600}
+                      height={400}
+                      className="w-full h-full object-cover hover:scale-105 transition-all duration-500 ease-in-out"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+};
+
+export default ProjectDetailPage;

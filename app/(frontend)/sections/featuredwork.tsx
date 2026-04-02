@@ -2,20 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-const featureWork = [
-  {
-    title: "Branding + Web Design for Cleaning Services",
-    description: "Developed a modern brand identity and a responsive web experience tailored for a professional cleaning company, focused on clarity and usability.",
-    roles: ["UX Designer", "Framer Designer"],
-    image: "/images/feature-work/feature-img-1.png"
-  },
-  {
-    title: "Brand Identity for a Health Care Company",
-    description: "Created a distinctive visual identity and design language to build trust and empathy for a forward-thinking health care provider.",
-    roles: ["UX Designer", "Framer Designer"],
-    image: "/images/feature-work/feature-img-2.png"
-  }
-];
+import { projects } from "@/lib/projects";
+
+const featureWork = projects.filter(p => p.featured);
 
 const FeaturedWork = () => {
 
@@ -32,7 +21,7 @@ const FeaturedWork = () => {
                 variant={"outline"}
                 className="h-auto py-3 px-5"
                 nativeButton={false}
-                render={<Link href={"/"}>View all my work</Link>}
+                render={<Link href={"/works"}>View all my works!</Link>}
               />
             </div>
           </div>
@@ -45,9 +34,9 @@ const FeaturedWork = () => {
                   key={index}
                   className={`group flex flex-col gap-3.5 sm:gap-5 p-3.5 sm:p-6 ${isRightCol ? "md:border-l md:border-border" : ""}`}
                 >
-                  <Link href={"/"} className="overflow-hidden">
+                  <Link href={`/works/${value.slug}`} className="overflow-hidden">
                     <Image
-                      src={value?.image}
+                      src={value.image}
                       alt="Image"
                       width={490}
                       height={300}
@@ -55,11 +44,11 @@ const FeaturedWork = () => {
                     />
                   </Link>
                   <div className="flex flex-col gap-1 sm:gap-2 px-2">
-                    <Link href={"/"}>
-                      <h4>{value?.title}</h4>
+                    <Link href={`/works/${value.slug}`}>
+                      <h4>{value.title}</h4>
                     </Link>
                     <div className="flex">
-                      <p>{value?.roles?.join(", ")}</p>
+                      <p>{value.category}</p>
                     </div>
                   </div>
                 </div>
