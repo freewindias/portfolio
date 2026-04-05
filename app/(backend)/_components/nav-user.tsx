@@ -6,97 +6,61 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
-import { EllipsisVertical, User, CreditCard, Bell, LogOut } from "lucide-react"
+import { LogOut } from "lucide-react"
+import { authClient } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
-  user,
+  user: initialUser,
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
+  user?: {
+    name?: string
+    email?: string
+    avatar?: string
   }
 }) {
-  const { isMobile } = useSidebar()
+  const router = useRouter()
+  const { data: session } = authClient.useSession()
+  
+  const user = {
+    name: session?.user.name || initialUser?.name || "User",
+    email: session?.user.email || initialUser?.email || "",
+    avatar: session?.user.image || initialUser?.avatar || "",
+  }
+
+  const handleLogout = async () => {
+    await authClient.signOut()
+    router.push("/")
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />
-            }
+        <div className="flex items-center gap-1 group/nav-user hover:bg-sidebar-accent/20 transition-all duration-300">
+          <Avatar className="size-10 rounded-full grayscale shrink-0 border border-sidebar-border shadow-sm group-hover/nav-user:grayscale-0 transition-all duration-500">
+            <AvatarImage src={user.avatar} alt={user.name} />
+            <AvatarFallback className="rounded-full bg-sidebar-primary text-sidebar-primary-foreground font-bold">
+              {user.name?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col flex-1 text-left text-sm leading-tight min-w-0">
+            <span className="truncate font-semibold text-sidebar-foreground">{user.name}</span>
+            <span className="truncate text-[11px] text-sidebar-foreground/60 lowercase font-medium">
+              {user.email}
+            </span>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="group/logout flex flex-col items-center justify-center gap-1 p-2 rounded-lg text-sidebar-foreground/50 hover:bg-destructive/10 hover:text-destructive shrink-0 border border-transparent hover:border-destructive/20 active:scale-95"
+            title="Log out"
           >
-            <Avatar className="size-8 rounded-lg grayscale">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-            </Avatar>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs text-foreground/70">
-                {user.email}
-              </span>
-            </div>
-            <EllipsisVertical strokeWidth={2} className="ml-auto size-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="min-w-56"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuGroup>
-              <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="size-8">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {user.email}
-                    </span>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <User strokeWidth={2} />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard strokeWidth={2} />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell strokeWidth={2} />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut strokeWidth={2} />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <LogOut className="size-4" strokeWidth={2.5} />
+            <span className="text-[8px] font-black uppercase tracking-tighter">Log Out</span>
+          </button>
+        </div>
       </SidebarMenuItem>
     </SidebarMenu>
   )

@@ -16,15 +16,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Command } from "lucide-react";
+import { House } from "lucide-react";
 import Link from "next/link";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Home",
@@ -39,16 +34,16 @@ const data = {
       title: "Update Frontend Data",
       items: [
         {
-          title: "Experience Section",
-          url: "/dashboard/udp/experience",
+          title: "Hero Section",
+          url: "/dashboard/update/hero",
         },
         {
-          title: "Education Section",
-          url: "/dashboard/udp/education",
+          title: "Experience Section",
+          url: "/dashboard/update/experience",
         },
         {
           title: "Projects Section",
-          url: "/dashboard/udp/projects",
+          url: "/dashboard/update/projects",
         },
       ],
     },
@@ -58,6 +53,15 @@ const data = {
         {
           title: "Expense Tracker",
           url: "/dashboard/expense-tracker",
+        },
+      ],
+    },
+    {
+      title: "Resume",
+      items: [
+        {
+          title: "Resume Editor",
+          url: "/dashboard/resume-editor",
         },
       ],
     },
@@ -83,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
               render={<Link href="/" />}
             >
-              <Command
+              <House
                 strokeWidth={2}
                 className="size-5!"
               />
@@ -117,7 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );
