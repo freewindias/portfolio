@@ -1,12 +1,12 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { projects } from "@/lib/projects";
+import { getProjects } from "@/server/projects";
 import { Button } from "@/components/ui/button";
 import Divider from "../_components/divider";
 
-const WorksPage = () => {
+const WorksPage = async () => {
+  const projects = await getProjects();
+
   return (
     <main className="min-h-screen">
       <Divider/>
@@ -38,7 +38,7 @@ const WorksPage = () => {
                   >
                     <Link href={`/works/${value.slug}`} className="overflow-hidden">
                       <Image
-                        src={value.image}
+                        src={value.image || "/images/placeholder.png"}
                         alt="Image"
                         width={490}
                         height={300}

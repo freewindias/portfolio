@@ -1,5 +1,5 @@
 import { getHeroData } from "@/server/hero";
-import { HeroForm } from "./hero-form";
+import { HeroForm } from "../../../_components/update-data/hero-form";
 
 export default async function Page() {
   const initialData = await getHeroData();

@@ -2,11 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { projects } from "@/lib/projects";
+import { getProjects } from "@/server/projects";
 
-const featureWork = projects.filter(p => p.featured);
-
-const FeaturedWork = () => {
+const FeaturedWork = async () => {
+  const projects = await getProjects();
+  const featureWork = projects.filter(p => p.featured);
 
   return (
     <section>

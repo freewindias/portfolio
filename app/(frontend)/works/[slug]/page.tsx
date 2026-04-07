@@ -1,15 +1,18 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { projects } from "@/lib/projects";
+import { getProjectBySlug } from "@/server/projects";
 import { Button } from "@/components/ui/button";
 import Divider from "../../_components/divider";
 
-const ProjectDetailPage = () => {
-  const { slug } = useParams();
-  const project = projects.find((p) => p.slug === slug);
+interface ProjectDetailPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+const ProjectDetailPage = async ({ params }: ProjectDetailPageProps) => {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return (
@@ -44,7 +47,7 @@ const ProjectDetailPage = () => {
             {/* Main Image */}
             <div className="border-t border-border overflow-hidden">
               <Image
-                src={project.image}
+                src={project.image || "/images/placeholder.png"}
                 alt={project.title}
                 width={1200}
                 height={600}
@@ -84,7 +87,7 @@ const ProjectDetailPage = () => {
                       <div>
                         <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">View project</p>
                         <Link 
-                          href={project.website} 
+                          href={project.website || "#"} 
                           target="_blank" 
                           className="text-lg mt-2 font-medium hover:underline flex items-center gap-1 transition-all"
                         >
@@ -110,7 +113,7 @@ const ProjectDetailPage = () => {
 
             {/* Additional Images Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 border-t border-border">
-              {project.additionalImages.map((image, index) => {
+              {project.additionalImages && project.additionalImages.map((image, index) => {
                 const isRightCol = index % 2 === 1;
                 const isFirstRow = index < 2;
 
