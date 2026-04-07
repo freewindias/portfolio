@@ -19,6 +19,7 @@ import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export function LoginForm({
   className,
@@ -64,18 +65,12 @@ export function LoginForm({
               href="/"
               className="flex flex-col items-center gap-2 font-medium"
             >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <GalleryVerticalEndIcon className="size-6" />
+              <div className="flex items-center justify-center">
+                <Image src="/logo.jpeg" alt="Logo" width={150} height={150} className="border-2 border-primary rounded-lg"/>
               </div>
               <span className="sr-only">Freewin Dias Portfolio</span>
             </Link>
             <h1 className="text-xl font-bold">Welcome to Freewin Dias Portfolio.</h1>
-            <FieldDescription>
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="underline underline-offset-4">
-                Sign up
-              </Link>
-            </FieldDescription>
           </div>
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -88,15 +83,7 @@ export function LoginForm({
             <FieldError errors={[errors.email]} />
           </Field>
           <Field>
-            <div className="flex items-center justify-between">
-              <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Link
-                href="/forgot-password"
-                className="text-xs underline underline-offset-4"
-              >
-                Forgot your password?
-              </Link>
-            </div>
+            <FieldLabel htmlFor="password">Password</FieldLabel>
             <Input
               id="password"
               type="password"
