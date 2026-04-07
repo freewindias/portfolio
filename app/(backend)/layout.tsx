@@ -1,7 +1,13 @@
 import { AppSidebar } from "@/app/(backend)/_components/app-sidebar";
 import { SiteHeader } from "@/app/(backend)/_components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import type { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Freewin Dias | Dashboard",
+  description: "Dashboard of Freewin Dias",
+};
 
 export default function BackendLayout({
   children,

@@ -128,6 +128,21 @@ export const project = pgTable("project", {
     .notNull(),
 });
 
+export const experience = pgTable("experience", {
+  id: text("id").primaryKey(),
+  iconUrl: text("icon_url"),
+  role: text("role").notNull(),
+  location: text("location").notNull(),
+  startYear: text("start_year").notNull(),
+  endYear: text("end_year").notNull(),
+  bulletPoints: jsonb("bullet_points").$type<string[]>().default([]).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
 export const schema = {
   user,
   session,
@@ -135,4 +150,5 @@ export const schema = {
   verification,
   hero,
   project,
+  experience,
 };
