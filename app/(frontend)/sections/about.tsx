@@ -1,3 +1,6 @@
+"use client"
+
+import React from "react";
 import { 
   SiUnrealengine, 
   SiNextdotjs, 
@@ -22,6 +25,12 @@ const techStackBadge = [
 ];
 
 const AboutMe = () => {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const calculateAge = (birthday: string) => {
     const birthDate = new Date(birthday);
     const today = new Date();
@@ -34,6 +43,8 @@ const AboutMe = () => {
   };
 
   const age = calculateAge("2002-12-06");
+
+  if (!mounted) return null;
 
   return (
     <section>

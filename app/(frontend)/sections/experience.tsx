@@ -53,8 +53,8 @@ const Experience = () => {
                     <Image
                       src={value?.icon}
                       alt="icon"
-                      width={32}
-                      height={19}
+                      width={30}
+                      height={30}
                     />
                     <div className="flex flex-wrap gap-5 items-center justify-between">
                       <h5>{value?.role}</h5>

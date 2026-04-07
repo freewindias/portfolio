@@ -26,7 +26,7 @@ export const Footer = ({
           <div className="border-x border-border relative">
             <div className="max-w-7xl flex flex-col justify-between mx-auto min-h-80 sm:min-h-72 md:min-h-80 relative p-4 py-10">
               <div className="mt-auto flex flex-col md:items-start items-center justify-center gap-2 pb-0">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground" suppressHydrationWarning>
                   ©{new Date().getFullYear()} {brandName}. All rights reserved.
                 </p>
                 {creatorName && creatorUrl && (

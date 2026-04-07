@@ -92,9 +92,27 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
+export const hero = pgTable("hero", {
+  id: text("id").primaryKey(),
+  bannerUrl: text("banner_url"),
+  profileUrl: text("profile_url"),
+  name: text("name"),
+  role: text("role"),
+  location: text("location"),
+  githubUrl: text("github_url"),
+  linkedinUrl: text("linkedin_url"),
+  mailEmail: text("mail_email"),
+  resumeUrl: text("resume_url"),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
 export const schema = {
   user,
   session,
   account,
   verification,
+  hero,
 };
