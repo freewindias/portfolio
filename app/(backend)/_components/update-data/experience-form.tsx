@@ -132,13 +132,13 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Field className="md:col-span-2">
           <FieldLabel htmlFor="role">Role & Company</FieldLabel>
-          <Input id="role" placeholder="E.g., Product Designer, Tailwind" {...register("role")} />
+          <Input id="role" placeholder="E.g., Role - Company" {...register("role")} />
           <FieldError errors={[errors.role]} />
         </Field>
 
         <Field>
           <FieldLabel htmlFor="location">Location</FieldLabel>
-          <Input id="location" placeholder="E.g., Remote or Mumbai, IN" {...register("location")} />
+          <Input id="location" placeholder="E.g., Remote or Mumbai, IN {Country Name only two letters}" {...register("location")} />
           <FieldError errors={[errors.location]} />
         </Field>
 
@@ -151,6 +151,7 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
         <Field>
           <FieldLabel htmlFor="endYear">End Year</FieldLabel>
           <Input id="endYear" placeholder="E.g., Present or 2024" {...register("endYear")} />
+          <FieldDescription>Tip: Write "Present" to highlight this as your current role.</FieldDescription>
           <FieldError errors={[errors.endYear]} />
         </Field>
       </div>
@@ -182,7 +183,7 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
           accept="image/*" 
           className="hidden" 
         />
-        <FieldDescription>A small logo for this experience entry.</FieldDescription>
+        <FieldDescription>A small logo for this experience entry. (Recommended: 80x80px. Max size: 10MB)</FieldDescription>
       </div>
 
       <div className="space-y-4">

@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import { getExperiences } from "@/server/experiences";
 
@@ -12,8 +11,8 @@ const experienceData = [
     bulletPoints: [
       "Led end-to-end redesign of dashboard UI, improving user retention by 23%",
       "Collaborated with engineers and product managers to ship features faster",
-      "Designed components used in a system adopted by 4+ internal teams"
-    ]
+      "Designed components used in a system adopted by 4+ internal teams",
+    ],
   },
   {
     iconUrl: "/images/icon/asana-icon.svg",
@@ -25,14 +24,14 @@ const experienceData = [
       "Created design systems for client projects across finance and healthcare",
       "Conducted user testing and research to validate designs",
       "Helped junior designers grow via mentorship",
-    ]
+    ],
   },
 ];
 
-
 const Experience = async () => {
   const dbExperiences = await getExperiences();
-  const experiencesToRender = dbExperiences && dbExperiences.length > 0 ? dbExperiences : experienceData;
+  const experiencesToRender =
+    dbExperiences && dbExperiences.length > 0 ? dbExperiences : experienceData;
 
   return (
     <section>
@@ -76,19 +75,21 @@ const Experience = async () => {
                       </div>
                     </div>
                     <ul>
-                      {value?.bulletPoints?.map((point: string, pointIndex: number) => {
-                        return (
-                          <li
-                            key={pointIndex}
-                            className="flex items-start gap-2 text-base font-normal text-muted-foreground"
-                          >
-                            <span className="w-2.5 h-2.5 text-muted-foreground">
-                              •
-                            </span>
-                            {point}
-                          </li>
-                        );
-                      })}
+                      {value?.bulletPoints?.map(
+                        (point: string, pointIndex: number) => {
+                          return (
+                            <li
+                              key={pointIndex}
+                              className="flex items-start gap-2 text-base font-normal text-muted-foreground"
+                            >
+                              <span className="w-2.5 h-2.5 text-muted-foreground">
+                                •
+                              </span>
+                              {point}
+                            </li>
+                          );
+                        },
+                      )}
                     </ul>
                   </div>
                 );
