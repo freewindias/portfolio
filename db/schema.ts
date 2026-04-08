@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, index, jsonb, integer } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -143,6 +143,76 @@ export const experience = pgTable("experience", {
     .notNull(),
 });
 
+export const budgetPeriod = pgTable("budget_period", {
+  id: text("id").primaryKey(),
+  month: integer("month").notNull(),
+  year: integer("year").notNull(),
+  creditCardLimit: integer("credit_card_limit").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const budgetSubCategory = pgTable("budget_sub_category", {
+  id: text("id").primaryKey(),
+  periodId: text("period_id")
+    .notNull()
+    .references(() => budgetPeriod.id, { onDelete: "cascade" }),
+  primaryCategory: text("primary_category").notNull(),
+  name: text("name").notNull(),
+  plannedAmount: integer("planned_amount").notNull().default(0),
+  paid: boolean("paid").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const transaction = pgTable("transaction", {
+  id: text("id").primaryKey(),
+  periodId: text("period_id")
+    .notNull()
+    .references(() => budgetPeriod.id, { onDelete: "cascade" }),
+  subCategoryId: text("sub_category_id")
+    .notNull()
+    .references(() => budgetSubCategory.id, { onDelete: "cascade" }),
+  amount: integer("amount").notNull().default(0),
+  description: text("description").notNull(),
+  date: timestamp("date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const budgetPeriodRelations = relations(budgetPeriod, ({ many }) => ({
+  subCategories: many(budgetSubCategory),
+  transactions: many(transaction),
+}));
+
+export const budgetSubCategoryRelations = relations(budgetSubCategory, ({ one, many }) => ({
+  period: one(budgetPeriod, {
+    fields: [budgetSubCategory.periodId],
+    references: [budgetPeriod.id],
+  }),
+  transactions: many(transaction),
+}));
+
+export const transactionRelations = relations(transaction, ({ one }) => ({
+  period: one(budgetPeriod, {
+    fields: [transaction.periodId],
+    references: [budgetPeriod.id],
+  }),
+  subCategory: one(budgetSubCategory, {
+    fields: [transaction.subCategoryId],
+    references: [budgetSubCategory.id],
+  }),
+}));
+
 export const schema = {
   user,
   session,
@@ -151,4 +221,10 @@ export const schema = {
   hero,
   project,
   experience,
+  budgetPeriod,
+  budgetSubCategory,
+  transaction,
+  budgetPeriodRelations,
+  budgetSubCategoryRelations,
+  transactionRelations,
 };

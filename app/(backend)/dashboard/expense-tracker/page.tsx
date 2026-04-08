@@ -1,8 +1,9 @@
+import { ExpenseDashboardClient } from "./_components/expense-dashboard-client";
 
 export default function Page() {
   return (
-    <div className="px-4">
-      <h1 className="text-2xl font-bold">Expense Tracker</h1>
+    <div className="p-4 md:p-8 pt-6">
+      <ExpenseDashboardClient />
     </div>
   );
 }

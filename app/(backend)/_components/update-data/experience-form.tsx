@@ -187,10 +187,10 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <FieldLabel>Bullet Points</FieldLabel>
           <Button type="button" variant="outline" size="sm" onClick={handleAddBulletPoint}>
-            <PlusCircle className="w-4 h-4 mr-2" /> Add Point
+            <PlusCircle className="w-4 h-4" /> Add Point
           </Button>
         </div>
         
@@ -216,22 +216,8 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-8 border-t">
-        {initialData?.id ? (
-          <Button 
-            type="button" 
-            variant="destructive" 
-            onClick={handleDelete}
-            disabled={isDeleting || isLoading}
-          >
-            {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
-            Delete Experience
-          </Button>
-        ) : (
-          <div /> // Placeholder to align submit right
-        )}
-        
-        <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 pt-8 border-t">
+        <div className="flex items-center gap-2">
           <Button 
             type="button" 
             variant="ghost" 
@@ -248,6 +234,19 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
             {initialData ? "Save Changes" : "Create Experience"}
           </Button>
         </div>
+        {initialData?.id ? (
+          <Button 
+            type="button" 
+            variant="destructive" 
+            onClick={handleDelete}
+            disabled={isDeleting || isLoading}
+          >
+            {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+            Delete Experience
+          </Button>
+        ) : (
+          <div /> // Placeholder to align submit right
+        )}
       </div>
     </form>
   );
