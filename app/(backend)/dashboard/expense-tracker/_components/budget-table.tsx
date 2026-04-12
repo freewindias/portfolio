@@ -8,7 +8,7 @@ import {
   toggleSubCategoryPaid,
   deleteSubCategory,
 } from "../_actions/budget-actions";
-import { Trash2 } from "lucide-react";
+import { Trash2, Check, X } from "lucide-react";
 import { toast } from "sonner";
 
 export type PrimaryCategory = "Income" | "Debt" | "Bills" | "Savings" | "Debit" | "Credit";
@@ -35,6 +35,7 @@ interface SubCategory {
   id: string;
   name: string;
   plannedAmount: number;
+  actualAmount: number;
   primaryCategory: string;
   paid: boolean;
 }
@@ -67,31 +68,38 @@ export function BudgetTable({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editPlanned, setEditPlanned] = useState("");
+  const [editActualValue, setEditActualValue] = useState(""); // Only for Income
 
-  // New row state
-  const [newName, setNewName] = useState("");
-  const [newPlanned, setNewPlanned] = useState("");
-  const [isAdding, setIsAdding] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const filtered = subCategories.filter((s) => s.primaryCategory === category);
-  const getActual = (id: string) =>
-    transactions.filter((t) => t.subCategoryId === id).reduce((s, t) => s + t.amount, 0);
+  
+  const getActual = (sub: SubCategory) => {
+    if (category === "Income") return sub.actualAmount;
+    return transactions
+      .filter((t) => t.subCategoryId === sub.id)
+      .reduce((s, t) => s + t.amount, 0);
+  };
 
   const totalPlanned = filtered.reduce((s, c) => s + c.plannedAmount, 0);
-  const totalActual  = filtered.reduce((s, c) => s + getActual(c.id), 0);
+  const totalActual  = filtered.reduce((s, c) => s + getActual(c), 0);
 
   /* ── Inline edit ── */
   const startEdit = (sub: SubCategory) => {
     setEditingId(sub.id);
     setEditName(sub.name);
     setEditPlanned((sub.plannedAmount / 100).toString());
+    if (category === "Income") setEditActualValue((sub.actualAmount / 100).toString());
   };
 
   const saveEdit = async (id: string) => {
     try {
-      const cents = Math.round((parseFloat(editPlanned) || 0) * 100);
-      await updateSubCategory(id, cents, editName.trim() || "Unnamed");
+      const plannedCents = Math.round((parseFloat(editPlanned) || 0) * 100);
+      const actualCents = category === "Income" 
+        ? Math.round((parseFloat(editActualValue) || 0) * 100)
+        : undefined;
+
+      await updateSubCategory(id, plannedCents, editName.trim() || "Unnamed", actualCents);
       setEditingId(null);
       onDataChange();
     } catch {
@@ -101,26 +109,31 @@ export function BudgetTable({
 
   /* ── Add new row ── */
   const handleAdd = async () => {
-    if (!newName.trim()) return;
     setSaving(true);
     try {
-      const cents = Math.round((parseFloat(newPlanned) || 0) * 100);
-      await createSubCategory({
+      const res = await createSubCategory({
         periodId,
         primaryCategory: category,
-        name: newName.trim(),
-        plannedAmount: cents,
+        name: "", // Start empty so user can type
+        plannedAmount: 0,
+        actualAmount: 0,
       });
-      setNewName("");
-      setNewPlanned("");
-      setIsAdding(false);
-      onDataChange();
+      
+      if (res.success && res.id) {
+        onDataChange();
+        setEditingId(res.id);
+        setEditName("");
+        setEditPlanned("0");
+        setEditActualValue("0");
+      }
     } catch {
       toast.error("Failed to add");
     } finally {
       setSaving(false);
     }
   };
+
+
 
   /* ── Toggle paid ── */
   const handlePaid = async (id: string, current: boolean) => {
@@ -160,7 +173,7 @@ export function BudgetTable({
           </tr>
         </thead>
         <tbody>
-          {filtered.length === 0 && !isAdding && (
+          {filtered.length === 0 && (
             <tr>
               <td colSpan={5} className="text-center text-muted-foreground py-4 text-xs italic">
                 No entries — click + to add
@@ -169,12 +182,17 @@ export function BudgetTable({
           )}
 
           {filtered.map((sub) => {
-            const actual = getActual(sub.id);
+            const actual = getActual(sub);
             const isEditing = editingId === sub.id;
             return (
               <tr
                 key={sub.id}
                 className="border-b border-border/40 last:border-0 hover:bg-muted/20 transition-colors group"
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                    saveEdit(sub.id);
+                  }
+                }}
               >
                 {/* Name */}
                 <td className="px-3 py-2" onClick={() => !isEditing && startEdit(sub)}>
@@ -183,7 +201,6 @@ export function BudgetTable({
                       autoFocus
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      onBlur={() => saveEdit(sub.id)}
                       onKeyDown={(e) => e.key === "Enter" && saveEdit(sub.id)}
                       className="w-full bg-transparent border-b border-border focus:outline-none px-0"
                     />
@@ -201,7 +218,6 @@ export function BudgetTable({
                       step="0.01"
                       value={editPlanned}
                       onChange={(e) => setEditPlanned(e.target.value)}
-                      onBlur={() => saveEdit(sub.id)}
                       onKeyDown={(e) => e.key === "Enter" && saveEdit(sub.id)}
                       className="w-20 bg-transparent border-b border-border focus:outline-none text-right px-0"
                     />
@@ -213,8 +229,22 @@ export function BudgetTable({
                 </td>
 
                 {/* Actual */}
-                <td className="px-3 py-2 text-right font-medium">
-                  {formatCurrency(actual)}
+                <td className="px-3 py-2 text-right" onClick={() => !isEditing && category === "Income" && startEdit(sub)}>
+                  {isEditing && category === "Income" ? (
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={editActualValue}
+                      onChange={(e) => setEditActualValue(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && saveEdit(sub.id)}
+                      className="w-20 bg-transparent border-b border-border focus:outline-none text-right px-0"
+                    />
+                  ) : (
+                    <span className={`font-medium ${category === "Income" ? "cursor-pointer" : ""}`}>
+                      {formatCurrency(actual)}
+                    </span>
+                  )}
                 </td>
 
                 {/* Paid checkbox */}
@@ -240,37 +270,7 @@ export function BudgetTable({
             );
           })}
 
-          {/* Inline add row */}
-          {isAdding && (
-            <tr className="border-b border-border/40 bg-muted/10">
-              <td className="px-3 py-2">
-                <input
-                  autoFocus
-                  placeholder="Category name..."
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-                  className="w-full bg-transparent border-b border-border focus:outline-none px-0 placeholder:text-muted-foreground/60"
-                />
-              </td>
-              <td className="px-3 py-2 text-right">
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="0"
-                  value={newPlanned}
-                  onChange={(e) => setNewPlanned(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-                  onBlur={handleAdd}
-                  className="w-20 bg-transparent border-b border-border focus:outline-none text-right px-0 placeholder:text-muted-foreground/60"
-                />
-              </td>
-              <td className="px-3 py-2 text-right text-muted-foreground">—</td>
-              <td className="px-2 py-2" />
-              <td className="px-1 py-2" />
-            </tr>
-          )}
+
         </tbody>
         <tfoot>
           <tr className="border-t border-border bg-muted/20">
@@ -282,8 +282,9 @@ export function BudgetTable({
             <td className="px-2 py-2" />
             <td className="px-1 py-2 text-center">
               <button
-                onClick={() => setIsAdding(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors font-bold text-base leading-none"
+                onClick={handleAdd}
+                disabled={saving}
+                className="text-muted-foreground hover:text-foreground transition-colors font-bold text-base leading-none disabled:opacity-50"
                 title="Add category"
               >
                 +

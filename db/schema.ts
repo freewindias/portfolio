@@ -147,7 +147,9 @@ export const budgetPeriod = pgTable("budget_period", {
   id: text("id").primaryKey(),
   month: integer("month").notNull(),
   year: integer("year").notNull(),
+  salaryDay: integer("salary_day").notNull().default(1),
   creditCardLimit: integer("credit_card_limit").notNull().default(0),
+  availableCreditLimit: integer("available_credit_limit").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -163,6 +165,7 @@ export const budgetSubCategory = pgTable("budget_sub_category", {
   primaryCategory: text("primary_category").notNull(),
   name: text("name").notNull(),
   plannedAmount: integer("planned_amount").notNull().default(0),
+  actualAmount: integer("actual_amount").notNull().default(0),
   paid: boolean("paid").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")

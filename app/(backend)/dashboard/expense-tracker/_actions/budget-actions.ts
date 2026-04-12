@@ -18,7 +18,14 @@ export async function getOrCreateBudgetPeriod(month: number, year: number) {
 
   if (!period) {
     const id = generateId();
-    await db.insert(budgetPeriod).values({ id, month, year, creditCardLimit: 0 });
+    await db.insert(budgetPeriod).values({ 
+      id, 
+      month, 
+      year, 
+      salaryDay: 1,
+      creditCardLimit: 0,
+      availableCreditLimit: 0
+    });
     period = await db.query.budgetPeriod.findFirst({
       where: eq(budgetPeriod.id, id),
     });
@@ -41,6 +48,7 @@ export async function createSubCategory(data: {
   primaryCategory: string;
   name: string;
   plannedAmount: number;
+  actualAmount?: number;
 }) {
   const id = generateId();
   await db.insert(budgetSubCategory).values({
@@ -49,14 +57,18 @@ export async function createSubCategory(data: {
     primaryCategory: data.primaryCategory,
     name: data.name,
     plannedAmount: data.plannedAmount,
+    actualAmount: data.actualAmount ?? 0,
     paid: false,
   });
   revalidatePath("/dashboard/expense-tracker");
-  return { success: true };
+  return { success: true, id };
 }
 
-export async function updateSubCategory(id: string, plannedAmount: number, name: string) {
-  await db.update(budgetSubCategory).set({ plannedAmount, name }).where(eq(budgetSubCategory.id, id));
+export async function updateSubCategory(id: string, plannedAmount: number, name: string, actualAmount?: number) {
+  const updateData: any = { plannedAmount, name };
+  if (actualAmount !== undefined) updateData.actualAmount = actualAmount;
+  
+  await db.update(budgetSubCategory).set(updateData).where(eq(budgetSubCategory.id, id));
   revalidatePath("/dashboard/expense-tracker");
   return { success: true };
 }
@@ -73,8 +85,15 @@ export async function deleteSubCategory(id: string) {
   return { success: true };
 }
 
-export async function updateCreditCardLimit(periodId: string, limitCents: number) {
-  await db.update(budgetPeriod).set({ creditCardLimit: limitCents }).where(eq(budgetPeriod.id, periodId));
+export async function updateBudgetPeriodSettings(
+  periodId: string, 
+  data: { 
+    creditCardLimit?: number; 
+    availableCreditLimit?: number;
+    salaryDay?: number;
+  }
+) {
+  await db.update(budgetPeriod).set(data).where(eq(budgetPeriod.id, periodId));
   revalidatePath("/dashboard/expense-tracker");
   return { success: true };
 }

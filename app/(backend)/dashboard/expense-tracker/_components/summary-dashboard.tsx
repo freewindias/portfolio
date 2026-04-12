@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { updateCreditCardLimit } from "../_actions/budget-actions";
+import { updateBudgetPeriodSettings } from "../_actions/budget-actions";
 import { Pencil, Check, X } from "lucide-react";
 import { toast } from "sonner";
 
 const CATEGORY_ORDER = ["Income", "Debit", "Credit", "Bills", "Debt", "Savings"] as const;
 
-interface SubCategory { id: string; name: string; primaryCategory: string; plannedAmount: number; }
+interface SubCategory { id: string; name: string; primaryCategory: string; plannedAmount: number; actualAmount: number; }
 interface Transaction { id: string; subCategoryId: string; amount: number; }
 
 function DonutStat({
@@ -86,13 +86,18 @@ function DonutStat({
 export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChange: () => void }) {
   const [editingLimit, setEditingLimit] = useState(false);
   const [limitInput, setLimitInput] = useState("");
+  const [availableLimitInput, setAvailableLimitInput] = useState("");
   const [saving, setSaving] = useState(false);
 
   const subCategories: SubCategory[] = data.subCategories ?? [];
   const transactions: Transaction[] = data.transactions ?? [];
 
   const getActual = (cat: string) => {
-    const ids = subCategories.filter((s) => s.primaryCategory === cat).map((s) => s.id);
+    const subs = subCategories.filter((s) => s.primaryCategory === cat);
+    if (cat === "Income") {
+      return subs.reduce((s, c) => s + (Number(c.actualAmount) || 0), 0);
+    }
+    const ids = subs.map((s) => s.id);
     return transactions.filter((t) => ids.includes(t.subCategoryId)).reduce((s, t) => s + t.amount, 0);
   };
   const getPlanned = (cat: string) =>
@@ -107,20 +112,26 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
   const budgetLeftActual = totalIncomeActual - totalExpensesActual;
 
   const creditLimit = data.creditCardLimit ?? 0;
+  const availableStarting = data.availableCreditLimit ?? 0;
   const creditActual = getActual("Credit");
-  const creditAvailable = Math.max(0, creditLimit - creditActual);
+  const creditAvailable = Math.max(0, (availableStarting > 0 ? availableStarting : creditLimit) - creditActual);
 
   const handleSaveLimit = async () => {
-    const val = parseFloat(limitInput);
-    if (isNaN(val) || val < 0) return toast.error("Invalid amount");
+    const valLimit = parseFloat(limitInput);
+    const valAvail = parseFloat(availableLimitInput);
+    if (isNaN(valLimit) || valLimit < 0) return toast.error("Invalid total limit");
+    
     setSaving(true);
     try {
-      await updateCreditCardLimit(data.id, Math.round(val * 100));
-      toast.success("Credit card limit updated");
+      await updateBudgetPeriodSettings(data.id, { 
+        creditCardLimit: Math.round(valLimit * 100),
+        availableCreditLimit: isNaN(valAvail) ? 0 : Math.round(valAvail * 100)
+      });
+      toast.success("Credit settings updated");
       setEditingLimit(false);
       onDataChange();
     } catch {
-      toast.error("Failed to update limit");
+      toast.error("Failed to update credit settings");
     } finally {
       setSaving(false);
     }
@@ -185,19 +196,37 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
 
       {/* Credit Card Limit Donut */}
       {editingLimit ? (
-        <div className="border border-border rounded-lg p-3 flex flex-col gap-3 min-h-[200px] items-center justify-center">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Credit Card Limit</h3>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            placeholder="e.g. 2000"
-            className="w-full border border-border rounded px-2 py-1.5 text-sm text-center bg-background focus:outline-none focus:ring-1 focus:ring-ring"
-            defaultValue={creditLimit > 0 ? (creditLimit / 100).toFixed(2) : ""}
-            onChange={(e) => setLimitInput(e.target.value)}
-            autoFocus
-          />
-          <div className="flex gap-2">
+        <div className="border border-border rounded-lg p-3 flex flex-col gap-2 min-h-[200px] items-center justify-center">
+          <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Credit Settings</h3>
+          
+          <div className="w-full flex flex-col gap-1">
+            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">Total Limit</label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Total Limit"
+              className="w-full border border-border rounded px-2 py-1 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-ring"
+              defaultValue={creditLimit > 0 ? (creditLimit / 100).toFixed(2) : ""}
+              onChange={(e) => setLimitInput(e.target.value)}
+              autoFocus
+            />
+          </div>
+
+          <div className="w-full flex flex-col gap-1">
+            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">Available Starting</label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="e.g. 2000"
+              className="w-full border border-border rounded px-2 py-1 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-ring"
+              defaultValue={availableStarting > 0 ? (availableStarting / 100).toFixed(2) : ""}
+              onChange={(e) => setAvailableLimitInput(e.target.value)}
+            />
+          </div>
+
+          <div className="flex gap-2 mt-1">
             <button onClick={handleSaveLimit} disabled={saving} className="flex items-center gap-1 text-xs px-3 py-1.5 bg-primary text-primary-foreground rounded hover:opacity-90">
               <Check className="h-3 w-3" /> Save
             </button>
@@ -209,7 +238,7 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
       ) : (
         <DonutStat
           title="Credit Card Limit"
-          center={formatCurrency(creditLimit)}
+          center={formatCurrency(availableStarting > 0 ? availableStarting : creditLimit)}
           data={[
             { name: "Available", value: creditAvailable },
             { name: "Spent", value: creditActual },
@@ -217,7 +246,11 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
           colors={["#3b82f6", "#ef4444"]}
           legend={[{ label: "Available", color: "#3b82f6" }, { label: "Spent", color: "#ef4444" }]}
           editable
-          onEdit={() => { setLimitInput((creditLimit / 100).toFixed(2)); setEditingLimit(true); }}
+          onEdit={() => { 
+            setLimitInput((creditLimit / 100).toFixed(2)); 
+            setAvailableLimitInput((availableStarting / 100).toFixed(2));
+            setEditingLimit(true); 
+          }}
         />
       )}
     </div>
