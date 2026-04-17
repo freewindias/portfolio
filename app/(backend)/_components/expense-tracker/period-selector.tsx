@@ -12,6 +12,7 @@ export function PeriodSelector({
   month, 
   year, 
   salaryDay,
+  hideSalaryDay,
   onMonthChange, 
   onYearChange,
   onSalaryDayChange
@@ -19,6 +20,7 @@ export function PeriodSelector({
   month: number; 
   year: number; 
   salaryDay: number;
+  hideSalaryDay?: boolean;
   onMonthChange: (m: number) => void; 
   onYearChange: (y: number) => void; 
   onSalaryDayChange: (d: number) => void;
@@ -61,21 +63,23 @@ export function PeriodSelector({
         </Select>
       </div>
 
-      <div className="flex flex-col gap-1 items-start">
-        <span className="text-[10px] font-medium text-muted-foreground uppercase ml-1">Sal. Day</span>
-        <Select value={salaryDay.toString()} onValueChange={(val) => val && onSalaryDayChange(parseInt(val))}>
-          <SelectTrigger className="w-[80px] h-9">
-            <SelectValue placeholder="Day" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[200px]">
-            {days.map((d) => (
-              <SelectItem key={d} value={d.toString()}>
-                {d}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {!hideSalaryDay && (
+        <div className="flex flex-col gap-1 items-start">
+          <span className="text-[10px] font-medium text-muted-foreground uppercase ml-1">Sal. Day</span>
+          <Select value={salaryDay.toString()} onValueChange={(val) => val && onSalaryDayChange(parseInt(val))}>
+            <SelectTrigger className="w-[80px] h-9">
+              <SelectValue placeholder="Day" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[200px]">
+              {days.map((d) => (
+                <SelectItem key={d} value={d.toString()}>
+                  {d}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { projectSchema, type ProjectValues } from "@/lib/validations/project";
 import { saveProject, deleteProject } from "@/server/projects";
 import { toast } from "sonner";
@@ -53,6 +53,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
   });
 
   const featuredWatch = watch("featured");
+  const descriptionValue = watch("description");
 
   const onSubmit = async (values: ProjectValues) => {
     setIsLoading(true);
@@ -193,11 +194,9 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
 
         <Field className="md:col-span-2">
           <FieldLabel htmlFor="description">Description</FieldLabel>
-          <Textarea 
-            id="description" 
-            placeholder="Detailed description of the project..." 
-            className="min-h-[120px]"
-            {...register("description")} 
+          <RichTextEditor
+            value={descriptionValue}
+            onChange={(content) => setValue("description", content, { shouldValidate: true, shouldDirty: true })}
           />
           <FieldError errors={[errors.description]} />
         </Field>

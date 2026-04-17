@@ -123,3 +123,10 @@ export async function deleteTransaction(id: string) {
   revalidatePath("/dashboard/expense-tracker");
   return { success: true };
 }
+
+export async function deleteBudgetPeriod(id: string) {
+  await db.delete(budgetPeriod).where(eq(budgetPeriod.id, id));
+  revalidatePath("/dashboard/expense-tracker");
+  return { success: true };
+}
+

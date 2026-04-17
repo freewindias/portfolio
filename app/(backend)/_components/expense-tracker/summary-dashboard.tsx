@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { updateBudgetPeriodSettings } from "../_actions/budget-actions";
+import { updateBudgetPeriodSettings } from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
 import { Pencil, Check, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -112,9 +112,10 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
   const budgetLeftActual = totalIncomeActual - totalExpensesActual;
 
   const creditLimit = data.creditCardLimit ?? 0;
-  const availableStarting = data.availableCreditLimit ?? 0;
+  const limitUsed = data.availableCreditLimit ?? 0; // Repurposing availableCreditLimit for limitUsed
   const creditActual = getActual("Credit");
-  const creditAvailable = Math.max(0, (availableStarting > 0 ? availableStarting : creditLimit) - creditActual);
+  const totalCreditSpent = creditActual + limitUsed;
+  const creditAvailable = Math.max(0, creditLimit - totalCreditSpent);
 
   const handleSaveLimit = async () => {
     const valLimit = parseFloat(limitInput);
@@ -179,20 +180,16 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
       />
 
       {/* Actual Money Left */}
-      <div className="border border-border rounded-lg p-3 flex flex-col gap-2 min-h-[200px]">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center">Actual Money Left</h3>
-        <div className="flex-1 flex items-center justify-center">
-          <span className="text-3xl font-bold">{formatCurrency(budgetLeftActual)}</span>
-        </div>
-        <div className="flex gap-3 justify-center">
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />Balance
-          </span>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />Spent
-          </span>
-        </div>
-      </div>
+      <DonutStat
+        title="Actual Money Left"
+        center={formatCurrency(budgetLeftActual)}
+        data={[
+          { name: "Balance", value: Math.max(0, budgetLeftActual) },
+          { name: "Spent", value: totalExpensesActual },
+        ]}
+        colors={["#3b82f6", "#ef4444"]}
+        legend={[{ label: "Balance", color: "#3b82f6" }, { label: "Spent", color: "#ef4444" }]}
+      />
 
       {/* Credit Card Limit Donut */}
       {editingLimit ? (
@@ -214,14 +211,14 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
           </div>
 
           <div className="w-full flex flex-col gap-1">
-            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">Available Starting</label>
+            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">Limit Used</label>
             <input
               type="number"
               min="0"
               step="0.01"
-              placeholder="e.g. 2000"
+              placeholder="e.g. 300"
               className="w-full border border-border rounded px-2 py-1 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-ring"
-              defaultValue={availableStarting > 0 ? (availableStarting / 100).toFixed(2) : ""}
+              defaultValue={limitUsed > 0 ? (limitUsed / 100).toFixed(2) : ""}
               onChange={(e) => setAvailableLimitInput(e.target.value)}
             />
           </div>
@@ -238,17 +235,17 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
       ) : (
         <DonutStat
           title="Credit Card Limit"
-          center={formatCurrency(availableStarting > 0 ? availableStarting : creditLimit)}
+          center={formatCurrency(creditLimit)}
           data={[
             { name: "Available", value: creditAvailable },
-            { name: "Spent", value: creditActual },
+            { name: "Spent", value: totalCreditSpent },
           ]}
           colors={["#3b82f6", "#ef4444"]}
           legend={[{ label: "Available", color: "#3b82f6" }, { label: "Spent", color: "#ef4444" }]}
           editable
           onEdit={() => { 
             setLimitInput((creditLimit / 100).toFixed(2)); 
-            setAvailableLimitInput((availableStarting / 100).toFixed(2));
+            setAvailableLimitInput((limitUsed / 100).toFixed(2));
             setEditingLimit(true); 
           }}
         />

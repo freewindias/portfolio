@@ -31,6 +31,15 @@ const data = {
       ],
     },
     {
+      title: "IMPORTANT",
+      items: [
+        {
+          title: "Notes",
+          url: "/dashboard/notes",
+        },
+      ],
+    },
+    {
       title: "Update Frontend Data",
       items: [
         {

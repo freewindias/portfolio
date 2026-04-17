@@ -1,7 +1,9 @@
+import { CurrentMonthSummary } from "../_components/expense-tracker/current-month-summary";
+
 export default function Page() {
   return (
-    <div className="px-4">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+    <div className="p-4">
+      <CurrentMonthSummary />
     </div>
   );
 }

@@ -216,6 +216,18 @@ export const transactionRelations = relations(transaction, ({ one }) => ({
   }),
 }));
 
+export const note = pgTable("note", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull().default(""),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
 export const schema = {
   user,
   session,
@@ -230,4 +242,5 @@ export const schema = {
   budgetPeriodRelations,
   budgetSubCategoryRelations,
   transactionRelations,
+  note,
 };

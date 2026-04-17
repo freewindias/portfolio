@@ -104,9 +104,10 @@ const ProjectDetailPage = async ({ params }: ProjectDetailPageProps) => {
                 {/* Description */}
                 <div className="border-t border-border/50 pt-8">
                   <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Description</p>
-                  <p className="mt-4 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-4xl">
-                    {project.description}
-                  </p>
+                  <div 
+                    className="mt-4 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-4xl tinymce-content"
+                    dangerouslySetInnerHTML={{ __html: project.description }}
+                  />
                 </div>
               </div>
             </div>

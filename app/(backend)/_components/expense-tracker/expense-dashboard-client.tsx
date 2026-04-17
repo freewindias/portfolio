@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getOrCreateBudgetPeriod, getBudgetDashboardData, updateBudgetPeriodSettings } from "../_actions/budget-actions";
+import { getOrCreateBudgetPeriod, getBudgetDashboardData, updateBudgetPeriodSettings, deleteBudgetPeriod } from "../_actions/budget-actions";
 import { PeriodSelector } from "./period-selector";
 import { SummaryDashboard } from "./summary-dashboard";
 import { BudgetGrid } from "./budget-grid";
 import { TransactionTable } from "./transaction-table";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 type DashboardData = {
   id: string;
@@ -25,22 +26,39 @@ export function ExpenseDashboardClient() {
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const period = await getOrCreateBudgetPeriod(month, year);
-        if (!period) throw new Error("Failed to create period");
-        const data = await getBudgetDashboardData(period.id);
-        setDashboardData(data as DashboardData);
-      } catch (error) {
-        console.error("Failed to load dashboard data", error);
-      } finally {
-        setLoading(false);
-      }
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const period = await getOrCreateBudgetPeriod(month, year);
+      if (!period) throw new Error("Failed to create period");
+      const data = await getBudgetDashboardData(period.id);
+      setDashboardData(data as DashboardData);
+    } catch (error) {
+      console.error("Failed to load dashboard data", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadData();
   }, [month, year]);
+
+  const handleDeletePeriod = async () => {
+    if (!dashboardData) return;
+    if (!window.confirm("Are you sure you want to delete all data for this month? This action cannot be undone.")) return;
+    
+    setLoading(true);
+    try {
+      await deleteBudgetPeriod(dashboardData.id);
+      toast.success("Period data deleted");
+      // loadData will re-run or we can call it explicitly
+      await loadData();
+    } catch (error) {
+      toast.error("Failed to delete period data");
+      setLoading(false);
+    }
+  };
 
   const refreshData = async () => {
     if (dashboardData) {
@@ -87,14 +105,27 @@ export function ExpenseDashboardClient() {
             )}
           </div>
         </div>
-        <PeriodSelector
-          month={month}
-          year={year}
-          salaryDay={dashboardData?.salaryDay ?? 1}
-          onMonthChange={setMonth}
-          onYearChange={setYear}
-          onSalaryDayChange={handleSalaryDayChange}
-        />
+        <div className="flex items-center gap-3">
+          {dashboardData && (
+            <button
+              onClick={handleDeletePeriod}
+              disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-100 hover:bg-red-200 transition-colors rounded-md"
+              title="Delete all data for this month"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Delete Data</span>
+            </button>
+          )}
+          <PeriodSelector
+            month={month}
+            year={year}
+            salaryDay={dashboardData?.salaryDay ?? 1}
+            onMonthChange={setMonth}
+            onYearChange={setYear}
+            onSalaryDayChange={handleSalaryDayChange}
+          />
+        </div>
       </div>
 
       {loading ? (
