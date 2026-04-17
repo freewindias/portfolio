@@ -31,15 +31,6 @@ const data = {
       ],
     },
     {
-      title: "IMPORTANT",
-      items: [
-        {
-          title: "Notes",
-          url: "/dashboard/notes",
-        },
-      ],
-    },
-    {
       title: "Update Frontend Data",
       items: [
         {
@@ -71,6 +62,15 @@ const data = {
         {
           title: "Resume Editor",
           url: "/dashboard/resume-editor",
+        },
+      ],
+    },
+    {
+      title: "Important",
+      items: [
+        {
+          title: "Notes",
+          url: "/dashboard/notes",
         },
       ],
     },

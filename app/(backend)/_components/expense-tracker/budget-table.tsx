@@ -7,7 +7,7 @@ import {
   updateSubCategory,
   toggleSubCategoryPaid,
   deleteSubCategory,
-} from "../_actions/budget-actions";
+} from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
 import { Trash2, Check, X } from "lucide-react";
 import { toast } from "sonner";
 

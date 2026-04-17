@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { formatCurrency } from "@/lib/utils";
-import { createTransaction, deleteTransaction } from "../_actions/budget-actions";
+import { createTransaction, deleteTransaction } from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 

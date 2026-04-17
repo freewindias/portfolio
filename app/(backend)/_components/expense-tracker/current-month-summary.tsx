@@ -5,7 +5,7 @@ import {
   getOrCreateBudgetPeriod,
   getBudgetDashboardData,
   updateBudgetPeriodSettings,
-} from "../../dashboard/expense-tracker/_actions/budget-actions";
+} from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
 import { SummaryDashboard } from "@/app/(backend)/_components/expense-tracker/summary-dashboard";
 import { PeriodSelector } from "@/app/(backend)/_components/expense-tracker/period-selector";
 import { Loader2 } from "lucide-react";

@@ -1,4 +1,4 @@
-import { ExpenseDashboardClient } from "./_components/expense-dashboard-client";
+import { ExpenseDashboardClient } from "@/app/(backend)/_components/expense-tracker/expense-dashboard-client";
 
 export default function Page() {
   return (

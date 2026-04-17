@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getOrCreateBudgetPeriod, getBudgetDashboardData, updateBudgetPeriodSettings, deleteBudgetPeriod } from "../_actions/budget-actions";
+import { getOrCreateBudgetPeriod, getBudgetDashboardData, updateBudgetPeriodSettings, deleteBudgetPeriod } from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
 import { PeriodSelector } from "./period-selector";
 import { SummaryDashboard } from "./summary-dashboard";
 import { BudgetGrid } from "./budget-grid";
