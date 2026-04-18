@@ -30,11 +30,12 @@ const WorksPage = async () => {
               {projects.map((value, index) => {
                 const isRightCol = index % 2 === 1;
                 const isLastRow = index >= projects.length - (projects.length % 2 === 0 ? 2 : 1);
+                const isLastItem = index === projects.length - 1;
 
                 return (
                   <div
                     key={index}
-                    className={`group flex flex-col ${isRightCol ? "md:border-l md:border-border" : ""} ${!isLastRow ? "border-b border-border" : ""}`}
+                    className={`group flex flex-col border-b border-border ${isRightCol ? "md:border-l md:border-border" : ""} ${isLastItem ? "border-b-0" : ""} ${isLastRow ? "md:border-b-0" : ""}`}
                   >
                     <div className="p-3.5 sm:p-6">
                       <Link href={`/works/${value.slug}`} className="overflow-hidden block">

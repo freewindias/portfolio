@@ -28,11 +28,13 @@ const FeaturedWork = async () => {
           <div className="grid grid-cols-1 md:grid-cols-2 border-t border-border">
             {featureWork?.map((value: any, index: number) => {
               const isRightCol = index % 2 === 1;
+              const isLastRow = index >= featureWork.length - (featureWork.length % 2 === 0 ? 2 : 1);
+              const isLastItem = index === featureWork.length - 1;
 
               return (
                   <div
                     key={index}
-                    className={`group flex flex-col ${isRightCol ? "md:border-l md:border-border" : ""}`}
+                    className={`group flex flex-col border-b border-border ${isRightCol ? "md:border-l md:border-border" : ""} ${isLastItem ? "border-b-0" : ""} ${isLastRow ? "md:border-b-0" : ""}`}
                   >
                     <div className="p-3.5 sm:p-6">
                       <Link href={`/works/${value.slug}`} className="overflow-hidden block">
