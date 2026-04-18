@@ -90,32 +90,62 @@ export async function saveProject(formData: FormData) {
     
     let imageUrl = formData.get("existingImage") as string || null;
     let additionalImages: string[] = [];
-
-    try {
-      const existingImages = formData.get("existingAdditionalImages");
-      if (existingImages) {
-        additionalImages = JSON.parse(existingImages as string);
+    const galleryOrderStr = formData.get("galleryOrder") as string;
+    
+    if (galleryOrderStr) {
+      try {
+        const galleryOrder = JSON.parse(galleryOrderStr);
+        const newFiles: string[] = [];
+        
+        // First, upload all new files
+        const additionalFilesCountString = formData.get("additionalImagesCount") as string;
+        if (additionalFilesCountString) {
+          const count = parseInt(additionalFilesCountString, 10);
+          for (let i = 0; i < count; i++) {
+            const file = formData.get(`additionalImage_${i}`) as File | null;
+            if (file && file.size > 0) {
+              const newUrl = await saveFile(file, "projects");
+              newFiles.push(newUrl);
+            }
+          }
+        }
+        
+        // Then, assemble in the correct order
+        additionalImages = galleryOrder.map((item: any) => {
+          if (item.type === 'existing') {
+            return item.url;
+          } else {
+            return newFiles[item.index];
+          }
+        }).filter(Boolean);
+      } catch (e) {
+        console.error("Error processing gallery order:", e);
       }
-    } catch(e) {
-      // Ignored parsing error
+    } else {
+      // Fallback for older version or if galleryOrder is missing
+      try {
+        const existingImages = formData.get("existingAdditionalImages");
+        if (existingImages) {
+          additionalImages = JSON.parse(existingImages as string);
+        }
+      } catch(e) {}
+      
+      const additionalFilesCountString = formData.get("additionalImagesCount") as string;
+      if (additionalFilesCountString) {
+        const count = parseInt(additionalFilesCountString, 10);
+        for (let i = 0; i < count; i++) {
+          const file = formData.get(`additionalImage_${i}`) as File | null;
+          if (file && file.size > 0) {
+            const newUrl = await saveFile(file, "projects");
+            additionalImages.push(newUrl);
+          }
+        }
+      }
     }
 
     const imageFile = formData.get("image") as File | null;
     if (imageFile && imageFile.size > 0) {
       imageUrl = await saveFile(imageFile, "projects");
-    }
-
-    // Process new additional images
-    const additionalFilesCountString = formData.get("additionalImagesCount");
-    if (additionalFilesCountString) {
-      const count = parseInt(additionalFilesCountString as string, 10);
-      for (let i = 0; i < count; i++) {
-        const file = formData.get(`additionalImage_${i}`) as File | null;
-        if (file && file.size > 0) {
-          const newUrl = await saveFile(file, "projects");
-          additionalImages.push(newUrl);
-        }
-      }
     }
 
     if (featured) {

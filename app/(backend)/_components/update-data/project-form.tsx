@@ -10,10 +10,17 @@ import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { projectSchema, type ProjectValues } from "@/lib/validations/project";
 import { saveProject, deleteProject } from "@/server/projects";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, GripVertical, CheckCircle2 } from "lucide-react";
+import { Loader2, Upload, Trash2, GripVertical, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
+
+type GalleryItem = {
+  id: string;
+  type: 'existing' | 'new';
+  url: string;
+  file?: File;
+};
 
 interface ProjectFormProps {
   initialData?: any;
@@ -25,8 +32,13 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null);
-  const [additionalImages, setAdditionalImages] = useState<{file: File; preview: string}[]>([]);
-  const [existingAdditionalImages, setExistingAdditionalImages] = useState<string[]>(initialData?.additionalImages || []);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(
+    (initialData?.additionalImages || []).map((url: string) => ({
+      id: crypto.randomUUID(),
+      type: 'existing',
+      url
+    }))
+  );
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const additionalImagesInputRef = useRef<HTMLInputElement>(null);
@@ -69,16 +81,23 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
       if (values.website) formData.append("website", values.website);
       formData.append("featured", String(values.featured));
       formData.append("existingImage", initialData?.image || "");
-      formData.append("existingAdditionalImages", JSON.stringify(existingAdditionalImages));
+      
+      const orderedGallery = galleryItems.map((item, index) => {
+        if (item.type === 'existing') {
+          return { type: 'existing', url: item.url };
+        } else {
+          return { type: 'new', index }; // reference to the file we'll append
+        }
+      });
+      
+      formData.append("galleryOrder", JSON.stringify(orderedGallery));
 
-      if (values.image) {
-        formData.append("image", values.image);
-      }
-
-      // Append new additional images
-      formData.append("additionalImagesCount", additionalImages.length.toString());
-      additionalImages.forEach((img, index) => {
-        formData.append(`additionalImage_${index}`, img.file);
+      const newFiles = galleryItems.filter(item => item.type === 'new' && item.file);
+      formData.append("additionalImagesCount", newFiles.length.toString());
+      newFiles.forEach((item, index) => {
+        if (item.file) {
+          formData.append(`additionalImage_${index}`, item.file);
+        }
       });
 
       const result = await saveProject(formData);
@@ -131,33 +150,37 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
   const handleAdditionalImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
-      const newImages = files.map(file => ({
-        file,
-        preview: URL.createObjectURL(file)
+      const newItems: GalleryItem[] = files.map(file => ({
+        id: crypto.randomUUID(),
+        type: 'new',
+        url: URL.createObjectURL(file), // This is the preview URL
+        file
       }));
-      setAdditionalImages(prev => [...prev, ...newImages]);
-      // Reset input value so same files can be selected again if needed
+      setGalleryItems(prev => [...prev, ...newItems]);
       if (additionalImagesInputRef.current) {
         additionalImagesInputRef.current.value = "";
       }
     }
   };
 
-  const removeNewAdditionalImage = (index: number) => {
-    setAdditionalImages(prev => {
-      const updated = [...prev];
-      URL.revokeObjectURL(updated[index].preview);
-      updated.splice(index, 1);
-      return updated;
+  const removeGalleryItem = (id: string) => {
+    setGalleryItems(prev => {
+      const item = prev.find(i => i.id === id);
+      if (item?.type === 'new') {
+        URL.revokeObjectURL(item.url);
+      }
+      return prev.filter(i => i.id !== id);
     });
   };
 
-  const removeExistingAdditionalImage = (index: number) => {
-    setExistingAdditionalImages(prev => {
-      const updated = [...prev];
-      updated.splice(index, 1);
-      return updated;
-    });
+  const moveGalleryItem = (index: number, direction: 'up' | 'down') => {
+    const newItems = [...galleryItems];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex >= 0 && targetIndex < newItems.length) {
+      [newItems[index], newItems[targetIndex]] = [newItems[targetIndex], newItems[index]];
+      setGalleryItems(newItems);
+    }
   };
 
   return (
@@ -277,28 +300,43 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
         />
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-          {existingAdditionalImages.map((src, index) => (
-            <div key={`existing-${index}`} className="relative group aspect-square rounded-md overflow-hidden border">
-              <Image src={src} alt="Gallery" fill className="object-cover" unoptimized />
-              <button
-                type="button"
-                onClick={() => removeExistingAdditionalImage(index)}
-                className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-          
-          {additionalImages.map((img, index) => (
-            <div key={`new-${index}`} className="relative group aspect-square rounded-md overflow-hidden border border-primary/50">
-              <Image src={img.preview} alt="New Gallery Image" fill className="object-cover" />
-              <div className="absolute top-2 left-2 bg-primary/80 text-white p-1 rounded">
-                <span className="text-[10px] uppercase font-bold px-1">New</span>
+          {galleryItems.map((item, index) => (
+            <div key={item.id} className={`relative group aspect-square rounded-md overflow-hidden border ${item.type === 'new' ? 'border-primary/50' : ''}`}>
+              <Image src={item.url} alt="Gallery" fill className="object-cover" unoptimized={item.type === 'existing'} />
+              
+              {item.type === 'new' && (
+                <div className="absolute top-2 left-2 bg-primary/80 text-white p-1 rounded">
+                  <span className="text-[10px] uppercase font-bold px-1">New</span>
+                </div>
+              )}
+
+              {/* Reorder Controls */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="secondary"
+                  className="h-7 w-7 bg-background/80"
+                  onClick={() => moveGalleryItem(index, 'up')}
+                  disabled={index === 0}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="secondary"
+                  className="h-7 w-7 bg-background/80"
+                  onClick={() => moveGalleryItem(index, 'down')}
+                  disabled={index === galleryItems.length - 1}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
               </div>
+
               <button
                 type="button"
-                onClick={() => removeNewAdditionalImage(index)}
+                onClick={() => removeGalleryItem(item.id)}
                 className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 className="w-4 h-4" />
@@ -306,7 +344,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             </div>
           ))}
 
-          {existingAdditionalImages.length === 0 && additionalImages.length === 0 && (
+          {galleryItems.length === 0 && (
             <div className="col-span-full py-8 text-center text-muted-foreground border-2 border-dashed rounded-md bg-muted/20">
               No gallery images uploaded yet.
             </div>

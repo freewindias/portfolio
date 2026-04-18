@@ -59,12 +59,12 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
               className={`overflow-hidden border-border cursor-pointer group ${isRightCol ? "md:border-l" : ""} ${!isLastRow ? "border-b" : ""}`}
               onClick={() => openLightbox(index)}
             >
-              <div className="relative overflow-hidden">
+              <div className="relative aspect-[600/400] overflow-hidden">
                 <Image
                   src={image}
                   alt={`${title} - ${index + 1}`}
-                  width={600}
-                  height={400}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover hover:scale-105 transition-all duration-500 ease-in-out"
                 />
               </div>
