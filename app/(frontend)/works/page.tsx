@@ -34,18 +34,20 @@ const WorksPage = async () => {
                 return (
                   <div
                     key={index}
-                    className={`group flex flex-col gap-3.5 sm:gap-5 p-3.5 sm:p-6 ${isRightCol ? "md:border-l md:border-border" : ""} ${!isLastRow ? "border-b border-border" : ""}`}
+                    className={`group flex flex-col ${isRightCol ? "md:border-l md:border-border" : ""} ${!isLastRow ? "border-b border-border" : ""}`}
                   >
-                    <Link href={`/works/${value.slug}`} className="overflow-hidden">
-                      <Image
-                        src={value.image || "/images/placeholder.png"}
-                        alt="Image"
-                        width={490}
-                        height={300}
-                        className="w-full h-full group-hover:scale-105 transition-all duration-300 ease-in-out"
-                      />
-                    </Link>
-                    <div className="flex flex-col gap-1 sm:gap-2 px-2">
+                    <div className="p-3.5 sm:p-6">
+                      <Link href={`/works/${value.slug}`} className="overflow-hidden block">
+                        <Image
+                          src={value.image || "/images/placeholder.png"}
+                          alt="Image"
+                          width={390}
+                          height={490}
+                          className="w-full h-[490px] object-contain group-hover:scale-105 transition-all duration-300 ease-in-out"
+                        />
+                      </Link>
+                    </div>
+                    <div className="flex flex-col gap-1 sm:gap-2 px-[22px] sm:px-[32px] py-5 border-t border-border">
                       <Link href={`/works/${value.slug}`}>
                         <h4>{value.title}</h4>
                       </Link>

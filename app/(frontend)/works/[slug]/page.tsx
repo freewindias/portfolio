@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getProjectBySlug } from "@/server/projects";
 import { Button } from "@/components/ui/button";
 import Divider from "../../_components/divider";
+import { ProjectGallery } from "@/components/project/project-gallery";
+
 
 interface ProjectDetailPageProps {
   params: Promise<{
@@ -45,13 +47,13 @@ const ProjectDetailPage = async ({ params }: ProjectDetailPageProps) => {
             </div>
 
             {/* Main Image */}
-            <div className="border-t border-border overflow-hidden">
+            <div className="border-t border-border overflow-hidden block">
               <Image
                 src={project.image || "/images/placeholder.png"}
                 alt={project.title}
-                width={1200}
+                width={600}
                 height={600}
-                className="w-full h-auto object-cover"
+                className="w-full h-[600px] object-contain"
                 priority
               />
             </div>
@@ -112,28 +114,14 @@ const ProjectDetailPage = async ({ params }: ProjectDetailPageProps) => {
               </div>
             </div>
 
-            {/* Additional Images Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 border-t border-border">
-              {project.additionalImages && project.additionalImages.map((image, index) => {
-                const isRightCol = index % 2 === 1;
-                const isFirstRow = index < 2;
+            {/* Project Gallery (Additional Images) */}
+            {project.additionalImages && project.additionalImages.length > 0 && (
+              <ProjectGallery 
+                images={project.additionalImages} 
+                title={project.title} 
+              />
+            )}
 
-                return (
-                  <div
-                    key={index}
-                    className={`overflow-hidden border-border ${isRightCol ? "md:border-l" : ""} ${isFirstRow ? "border-b" : index < 2 ? "" : index === 2 ? "border-b md:border-b-0" : ""}`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${project.title} - ${index + 1}`}
-                      width={600}
-                      height={400}
-                      className="w-full h-full object-cover hover:scale-105 transition-all duration-500 ease-in-out"
-                    />
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
       </section>
