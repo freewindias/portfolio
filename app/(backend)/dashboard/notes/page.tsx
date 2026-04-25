@@ -1,4 +1,4 @@
-import { getNotes } from "./_actions/note-actions";
+import { getNotes } from "../../_actions/note-actions";
 import { NotesClient } from "../../_components/notes/notes-client";
 
 export default async function NotesPage() {

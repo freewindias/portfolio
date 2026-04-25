@@ -3,14 +3,32 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { updateBudgetPeriodSettings } from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
+import { updateBudgetPeriodSettings } from "@/app/(backend)/_actions/budget-actions";
 import { Pencil, Check, X } from "lucide-react";
 import { toast } from "sonner";
 
-const CATEGORY_ORDER = ["Income", "Debit", "Credit", "Bills", "Debt", "Savings"] as const;
+const CATEGORY_ORDER = [
+  "Income",
+  "Debit",
+  "Credit",
+  "Bills",
+  "Debt",
+  "Savings",
+] as const;
 
-interface SubCategory { id: string; name: string; primaryCategory: string; plannedAmount: number; actualAmount: number; }
-interface Transaction { id: string; subCategoryId: string; amount: number; }
+interface SubCategory {
+  id: string;
+  name: string;
+  primaryCategory: string;
+  plannedAmount: number;
+  actualAmount: number;
+  paid: boolean;
+}
+interface Transaction {
+  id: string;
+  subCategoryId: string;
+  amount: number;
+}
 
 function DonutStat({
   title,
@@ -27,7 +45,7 @@ function DonutStat({
   center?: string;
   data: { name: string; value: number }[];
   colors: string[];
-  legend: { label: string; color: string }[];
+  legend: { label: string; color?: string }[];
   editable?: boolean;
   onEdit?: () => void;
 }) {
@@ -38,9 +56,14 @@ function DonutStat({
   return (
     <div className="border border-border rounded-lg p-3 flex flex-col gap-2 min-h-[200px]">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {title}
+        </h3>
         {editable && (
-          <button onClick={onEdit} className="text-muted-foreground hover:text-foreground transition-colors">
+          <button
+            onClick={onEdit}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
             <Pencil className="h-3 w-3" />
           </button>
         )}
@@ -71,19 +94,53 @@ function DonutStat({
           </div>
         )}
       </div>
-      <div className="flex gap-3 justify-center">
-        {legend.map((l) => (
-          <span key={l.label} className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span className="w-2 h-2 rounded-full inline-block" style={{ background: l.color }} />
-            {l.label}
-          </span>
-        ))}
+      <div className="flex flex-col gap-1 items-center">
+        <div className="flex gap-3 justify-center">
+          {legend.slice(0, legend.length > 2 ? 1 : legend.length).map((l) => (
+            <span
+              key={l.label}
+              className="flex items-center gap-1 text-[10px] text-muted-foreground"
+            >
+              {l.color && (
+                <span
+                  className="w-2 h-2 rounded-full inline-block shrink-0"
+                  style={{ background: l.color }}
+                />
+              )}
+              {l.label}
+            </span>
+          ))}
+        </div>
+        {legend.length > 2 && (
+          <div className="flex gap-3 justify-center">
+            {legend.slice(1).map((l) => (
+              <span
+                key={l.label}
+                className="flex items-center gap-1 text-[10px] text-muted-foreground"
+              >
+                {l.color && (
+                  <span
+                    className="w-2 h-2 rounded-full inline-block shrink-0"
+                    style={{ background: l.color }}
+                  />
+                )}
+                {l.label}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChange: () => void }) {
+export function SummaryDashboard({
+  data,
+  onDataChange,
+}: {
+  data: any;
+  onDataChange: () => void;
+}) {
   const [editingLimit, setEditingLimit] = useState(false);
   const [limitInput, setLimitInput] = useState("");
   const [availableLimitInput, setAvailableLimitInput] = useState("");
@@ -97,16 +154,38 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
     if (cat === "Income") {
       return subs.reduce((s, c) => s + (Number(c.actualAmount) || 0), 0);
     }
-    const ids = subs.map((s) => s.id);
-    return transactions.filter((t) => ids.includes(t.subCategoryId)).reduce((s, t) => s + t.amount, 0);
+
+    // For categories with a "paid" tick, only count transactions if the subcategory is marked as paid
+    const paidOnlyCategories = ["Bills", "Debt", "Savings"];
+    const ids = subs
+      .filter((s) => !paidOnlyCategories.includes(cat) || s.paid)
+      .map((s) => s.id);
+
+    return transactions
+      .filter((t) => ids.includes(t.subCategoryId))
+      .reduce((s, t) => s + t.amount, 0);
   };
   const getPlanned = (cat: string) =>
-    subCategories.filter((s) => s.primaryCategory === cat).reduce((s, c) => s + c.plannedAmount, 0);
+    subCategories
+      .filter((s) => s.primaryCategory === cat)
+      .reduce((s, c) => s + c.plannedAmount, 0);
 
   const totalIncomePlanned = getPlanned("Income");
   const totalIncomeActual = getActual("Income");
-  const totalExpensesPlanned = ["Debit", "Credit", "Bills", "Debt", "Savings"].reduce((s, c) => s + getPlanned(c), 0);
-  const totalExpensesActual = ["Debit", "Credit", "Bills", "Debt", "Savings"].reduce((s, c) => s + getActual(c), 0);
+  const totalExpensesPlanned = [
+    "Debit",
+    "Credit",
+    "Bills",
+    "Debt",
+    "Savings",
+  ].reduce((s, c) => s + getPlanned(c), 0);
+  const totalExpensesActual = [
+    "Debit",
+    "Credit",
+    "Bills",
+    "Debt",
+    "Savings",
+  ].reduce((s, c) => s + getActual(c), 0);
 
   const budgetLeftPlanned = totalIncomePlanned - totalExpensesPlanned;
   const budgetLeftActual = totalIncomeActual - totalExpensesActual;
@@ -114,19 +193,21 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
   const creditLimit = data.creditCardLimit ?? 0;
   const limitUsed = data.availableCreditLimit ?? 0; // Repurposing availableCreditLimit for limitUsed
   const creditActual = getActual("Credit");
-  const totalCreditSpent = creditActual + limitUsed;
+
+  const totalCreditSpent = Math.max(0, creditActual + limitUsed);
   const creditAvailable = Math.max(0, creditLimit - totalCreditSpent);
 
   const handleSaveLimit = async () => {
     const valLimit = parseFloat(limitInput);
     const valAvail = parseFloat(availableLimitInput);
-    if (isNaN(valLimit) || valLimit < 0) return toast.error("Invalid total limit");
-    
+    if (isNaN(valLimit) || valLimit < 0)
+      return toast.error("Invalid total limit");
+
     setSaving(true);
     try {
-      await updateBudgetPeriodSettings(data.id, { 
+      await updateBudgetPeriodSettings(data.id, {
         creditCardLimit: Math.round(valLimit * 100),
-        availableCreditLimit: isNaN(valAvail) ? 0 : Math.round(valAvail * 100)
+        availableCreditLimit: isNaN(valAvail) ? 0 : Math.round(valAvail * 100),
       });
       toast.success("Credit settings updated");
       setEditingLimit(false);
@@ -143,24 +224,40 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
       {/* Summary Table */}
       <div className="border border-border rounded-lg overflow-hidden">
         <div className="bg-muted/40 px-3 py-2 border-b border-border">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-center text-muted-foreground">Summary</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-center text-muted-foreground">
+            Summary
+          </h3>
         </div>
         <table className="w-full text-xs">
           <thead>
             <tr className="border-b border-border/50">
-              <th className="text-left px-3 py-1.5 text-muted-foreground font-medium">Category</th>
-              <th className="text-right px-2 py-1.5 text-muted-foreground font-medium">Planned</th>
-              <th className="text-right px-3 py-1.5 text-muted-foreground font-medium">Actual</th>
+              <th className="text-left px-3 py-1.5 text-muted-foreground font-medium">
+                Category
+              </th>
+              <th className="text-right px-2 py-1.5 text-muted-foreground font-medium">
+                Planned
+              </th>
+              <th className="text-right px-3 py-1.5 text-muted-foreground font-medium">
+                Actual
+              </th>
             </tr>
           </thead>
           <tbody>
             {CATEGORY_ORDER.map((cat) => (
               <tr key={cat} className="border-b border-border/30 last:border-0">
                 <td className="px-3 py-1.5 uppercase text-muted-foreground font-medium text-[10px] tracking-wide">
-                  {cat === "Debit" ? "Debit Exp." : cat === "Credit" ? "Credit Exp." : cat}
+                  {cat === "Debit"
+                    ? "Debit Exp."
+                    : cat === "Credit"
+                      ? "Credit Exp."
+                      : cat}
                 </td>
-                <td className="px-2 py-1.5 text-right font-medium">{formatCurrency(getPlanned(cat))}</td>
-                <td className="px-3 py-1.5 text-right">{formatCurrency(getActual(cat))}</td>
+                <td className="px-2 py-1.5 text-right font-medium">
+                  {formatCurrency(getPlanned(cat))}
+                </td>
+                <td className="px-3 py-1.5 text-right">
+                  {formatCurrency(getActual(cat))}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -176,7 +273,10 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
           { name: "Spent", value: totalExpensesPlanned },
         ]}
         colors={["#3b82f6", "#ef4444"]}
-        legend={[{ label: "Left", color: "#3b82f6" }, { label: "Spent", color: "#ef4444" }]}
+        legend={[
+          { label: "Left", color: "#3b82f6" },
+          { label: "Spent", color: "#ef4444" },
+        ]}
       />
 
       {/* Actual Money Left */}
@@ -188,30 +288,41 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
           { name: "Spent", value: totalExpensesActual },
         ]}
         colors={["#3b82f6", "#ef4444"]}
-        legend={[{ label: "Balance", color: "#3b82f6" }, { label: "Spent", color: "#ef4444" }]}
+        legend={[
+          { label: "Balance", color: "#3b82f6" },
+          { label: "Spent", color: "#ef4444" },
+        ]}
       />
 
       {/* Credit Card Limit Donut */}
       {editingLimit ? (
         <div className="border border-border rounded-lg p-3 flex flex-col gap-2 min-h-[200px] items-center justify-center">
-          <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Credit Settings</h3>
-          
+          <h3 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Credit Settings
+          </h3>
+
           <div className="w-full flex flex-col gap-1">
-            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">Total Limit</label>
+            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">
+              Total Limit
+            </label>
             <input
               type="number"
               min="0"
               step="0.01"
               placeholder="Total Limit"
               className="w-full border border-border rounded px-2 py-1 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-ring"
-              defaultValue={creditLimit > 0 ? (creditLimit / 100).toFixed(2) : ""}
+              defaultValue={
+                creditLimit > 0 ? (creditLimit / 100).toFixed(2) : ""
+              }
               onChange={(e) => setLimitInput(e.target.value)}
               autoFocus
             />
           </div>
 
           <div className="w-full flex flex-col gap-1">
-            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">Limit Used</label>
+            <label className="text-[9px] uppercase font-medium text-muted-foreground ml-1">
+              Limit Used
+            </label>
             <input
               type="number"
               min="0"
@@ -224,10 +335,17 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
           </div>
 
           <div className="flex gap-2 mt-1">
-            <button onClick={handleSaveLimit} disabled={saving} className="flex items-center gap-1 text-xs px-3 py-1.5 bg-primary text-primary-foreground rounded hover:opacity-90">
+            <button
+              onClick={handleSaveLimit}
+              disabled={saving}
+              className="flex items-center gap-1 text-xs px-3 py-1.5 bg-primary text-primary-foreground rounded hover:opacity-90"
+            >
               <Check className="h-3 w-3" /> Save
             </button>
-            <button onClick={() => setEditingLimit(false)} className="flex items-center gap-1 text-xs px-3 py-1.5 border border-border rounded hover:bg-muted">
+            <button
+              onClick={() => setEditingLimit(false)}
+              className="flex items-center gap-1 text-xs px-3 py-1.5 border border-border rounded hover:bg-muted"
+            >
               <X className="h-3 w-3" /> Cancel
             </button>
           </div>
@@ -235,18 +353,22 @@ export function SummaryDashboard({ data, onDataChange }: { data: any; onDataChan
       ) : (
         <DonutStat
           title="Credit Card Limit"
-          center={formatCurrency(creditLimit)}
+          center={formatCurrency(creditAvailable)}
           data={[
             { name: "Available", value: creditAvailable },
             { name: "Spent", value: totalCreditSpent },
           ]}
           colors={["#3b82f6", "#ef4444"]}
-          legend={[{ label: "Available", color: "#3b82f6" }, { label: "Spent", color: "#ef4444" }]}
+          legend={[
+            { label: `Limit: ${formatCurrency(creditLimit)}` },
+            { label: "Remaining Limit", color: "#3b82f6" },
+            { label: "Spent", color: "#ef4444" },
+          ]}
           editable
-          onEdit={() => { 
-            setLimitInput((creditLimit / 100).toFixed(2)); 
+          onEdit={() => {
+            setLimitInput((creditLimit / 100).toFixed(2));
             setAvailableLimitInput((limitUsed / 100).toFixed(2));
-            setEditingLimit(true); 
+            setEditingLimit(true);
           }}
         />
       )}

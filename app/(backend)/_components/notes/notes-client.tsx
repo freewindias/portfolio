@@ -5,7 +5,7 @@ import {
   createNote,
   deleteNote,
   updateNote,
-} from "../../dashboard/notes/_actions/note-actions";
+} from "../../_actions/note-actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,7 +35,11 @@ export function NotesClient({ initialNotes }: { initialNotes: Note[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [viewingNote, setViewingNote] = useState<Note | null>(null);
 
-  const [formState, setFormState] = useState({ title: "", subtitle: "", content: "" });
+  const [formState, setFormState] = useState({
+    title: "",
+    subtitle: "",
+    content: "",
+  });
   const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
@@ -45,7 +49,11 @@ export function NotesClient({ initialNotes }: { initialNotes: Note[] }) {
   };
 
   const startEdit = (note: Note) => {
-    setFormState({ title: note.title, subtitle: note.subtitle, content: note.content });
+    setFormState({
+      title: note.title,
+      subtitle: note.subtitle,
+      content: note.content,
+    });
     setEditingId(note.id);
     setIsAdding(false);
   };
@@ -170,9 +178,7 @@ export function NotesClient({ initialNotes }: { initialNotes: Note[] }) {
               <label className="text-sm font-medium">Content</label>
               <RichTextEditor
                 value={formState.content}
-                onChange={(content) =>
-                  setFormState((p) => ({ ...p, content }))
-                }
+                onChange={(content) => setFormState((p) => ({ ...p, content }))}
               />
             </div>
           </CardContent>
@@ -227,9 +233,9 @@ export function NotesClient({ initialNotes }: { initialNotes: Note[] }) {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pt-4 overflow-hidden relative">
-              <div 
-                className="text-sm line-clamp-5 tinymce-content" 
-                dangerouslySetInnerHTML={{ __html: note.content }} 
+              <div
+                className="text-sm line-clamp-5 tinymce-content"
+                dangerouslySetInnerHTML={{ __html: note.content }}
               />
             </CardContent>
           </Card>
@@ -248,13 +254,13 @@ export function NotesClient({ initialNotes }: { initialNotes: Note[] }) {
               <X className="h-4 w-4" />
             </Button>
             <CardHeader className="border-b bg-secondary/20 pb-4 pr-12 rounded-t-xl">
-              <CardTitle className="text-2xl leading-tight">{viewingNote.title}</CardTitle>
-              <CardDescription>
-                {viewingNote.subtitle}
-              </CardDescription>
+              <CardTitle className="text-2xl leading-tight">
+                {viewingNote.title}
+              </CardTitle>
+              <CardDescription>{viewingNote.subtitle}</CardDescription>
             </CardHeader>
             <CardContent className="overflow-y-auto max-h-[70vh] pt-6 text-base">
-              <div 
+              <div
                 className="tinymce-content"
                 dangerouslySetInnerHTML={{ __html: viewingNote.content }}
               />

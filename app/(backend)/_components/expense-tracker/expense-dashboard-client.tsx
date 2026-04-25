@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getOrCreateBudgetPeriod, getBudgetDashboardData, updateBudgetPeriodSettings, deleteBudgetPeriod } from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
+import {
+  getOrCreateBudgetPeriod,
+  getBudgetDashboardData,
+  updateBudgetPeriodSettings,
+  deleteBudgetPeriod,
+} from "@/app/(backend)/_actions/budget-actions";
 import { PeriodSelector } from "./period-selector";
 import { SummaryDashboard } from "./summary-dashboard";
 import { BudgetGrid } from "./budget-grid";
@@ -24,7 +29,9 @@ export function ExpenseDashboardClient() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [loading, setLoading] = useState(true);
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null,
+  );
 
   const loadData = async () => {
     setLoading(true);
@@ -46,8 +53,13 @@ export function ExpenseDashboardClient() {
 
   const handleDeletePeriod = async () => {
     if (!dashboardData) return;
-    if (!window.confirm("Are you sure you want to delete all data for this month? This action cannot be undone.")) return;
-    
+    if (
+      !window.confirm(
+        "Are you sure you want to delete all data for this month? This action cannot be undone.",
+      )
+    )
+      return;
+
     setLoading(true);
     try {
       await deleteBudgetPeriod(dashboardData.id);
@@ -82,8 +94,12 @@ export function ExpenseDashboardClient() {
     const { month, year, salaryDay } = dashboardData;
     const startDate = new Date(year, month - 1, salaryDay);
     const endDate = new Date(year, month, salaryDay - 1);
-    
-    const options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" };
+
+    const options: Intl.DateTimeFormatOptions = {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    };
     return `${startDate.toLocaleDateString("en-US", options)} - ${endDate.toLocaleDateString("en-US", options)}`;
   };
 
@@ -92,9 +108,13 @@ export function ExpenseDashboardClient() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-2 border-b border-border">
         <div className="flex flex-col">
-          <h1 className="text-2xl font-bold tracking-tight">Paisa Kidar gaya BC</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Paisa Kidar gaya BC
+          </h1>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Monthly Budget in CAD</span>
+            <span className="text-xs text-muted-foreground">
+              Monthly Budget in CAD
+            </span>
             {dashboardData && (
               <>
                 <span className="text-xs text-muted-foreground">•</span>

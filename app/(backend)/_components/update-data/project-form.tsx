@@ -81,6 +81,9 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
       if (values.website) formData.append("website", values.website);
       formData.append("featured", String(values.featured));
       formData.append("existingImage", initialData?.image || "");
+      if (values.image) {
+        formData.append("image", values.image);
+      }
       
       const orderedGallery = galleryItems.map((item, index) => {
         if (item.type === 'existing') {

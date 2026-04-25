@@ -57,11 +57,11 @@ const data = {
       ],
     },
     {
-      title: "Resume",
+      title: "Storage",
       items: [
         {
-          title: "Resume Editor",
-          url: "/dashboard/resume-editor",
+          title: "Uploaded Images",
+          url: "/dashboard/storage",
         },
       ],
     },

@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { formatCurrency } from "@/lib/utils";
-import { createTransaction, deleteTransaction } from "@/app/(backend)/dashboard/expense-tracker/_actions/budget-actions";
+import {
+  createTransaction,
+  deleteTransaction,
+} from "@/app/(backend)/_actions/budget-actions";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,7 +40,7 @@ interface Props {
 
 export function TransactionTable({ data, onDataChange }: Props) {
   const subCategories: SubCategory[] = (data.subCategories ?? []).filter(
-    (s: SubCategory) => EXPENSE_CATEGORIES.includes(s.primaryCategory)
+    (s: SubCategory) => EXPENSE_CATEGORIES.includes(s.primaryCategory),
   );
 
   const incomeIds = (data.subCategories ?? [])
@@ -45,12 +48,14 @@ export function TransactionTable({ data, onDataChange }: Props) {
     .map((s: SubCategory) => s.id);
 
   const transactions: TransactionRow[] = (data.transactions ?? []).filter(
-    (t: TransactionRow) => !incomeIds.includes(t.subCategoryId)
+    (t: TransactionRow) => !incomeIds.includes(t.subCategoryId),
   );
 
   /* ── Add row state ── */
   const [adding, setAdding] = useState(false);
-  const [newDate, setNewDate] = useState(() => new Date().toISOString().split("T")[0]);
+  const [newDate, setNewDate] = useState(
+    () => new Date().toISOString().split("T")[0],
+  );
   const [newSubCatId, setNewSubCatId] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newNotes, setNewNotes] = useState("");
@@ -97,31 +102,46 @@ export function TransactionTable({ data, onDataChange }: Props) {
   };
 
   const sorted = [...transactions].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 
   return (
     <div className="border border-border rounded-md overflow-hidden">
       {/* Red header */}
       <div className="bg-red-600 px-4 py-2.5 text-white text-center">
-        <span className="text-xs font-bold uppercase tracking-widest">Transaction</span>
+        <span className="text-xs font-bold uppercase tracking-widest">
+          Transaction
+        </span>
       </div>
 
       <table className="w-full text-xs">
         <thead>
           <tr className="border-b border-border bg-muted/30">
-            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">Date</th>
-            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">Table</th>
-            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">Category</th>
-            <th className="text-right px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">Amount</th>
-            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">Notes</th>
+            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">
+              Date
+            </th>
+            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">
+              Table
+            </th>
+            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">
+              Category
+            </th>
+            <th className="text-right px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">
+              Amount
+            </th>
+            <th className="text-left px-3 py-2 font-medium text-muted-foreground uppercase text-[10px] tracking-wide">
+              Notes
+            </th>
             <th className="w-6 px-1 py-2" />
           </tr>
         </thead>
         <tbody>
           {sorted.length === 0 && !adding && (
             <tr>
-              <td colSpan={6} className="py-6 text-center text-muted-foreground italic">
+              <td
+                colSpan={6}
+                className="py-6 text-center text-muted-foreground italic"
+              >
                 No transactions yet
               </td>
             </tr>
@@ -135,14 +155,25 @@ export function TransactionTable({ data, onDataChange }: Props) {
               day: "numeric",
             });
             return (
-              <tr key={t.id} className="border-b border-border/40 last:border-0 hover:bg-muted/20 transition-colors group">
-                <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">{dateStr}</td>
+              <tr
+                key={t.id}
+                className="border-b border-border/40 last:border-0 hover:bg-muted/20 transition-colors group"
+              >
+                <td className="px-3 py-2.5 text-muted-foreground whitespace-nowrap">
+                  {dateStr}
+                </td>
                 <td className="px-3 py-2.5 font-medium uppercase text-[10px] tracking-wide">
-                  {sub ? (TABLE_LABELS[sub.primaryCategory] ?? sub.primaryCategory) : "—"}
+                  {sub
+                    ? (TABLE_LABELS[sub.primaryCategory] ?? sub.primaryCategory)
+                    : "—"}
                 </td>
                 <td className="px-3 py-2.5">{sub?.name ?? "—"}</td>
-                <td className="px-3 py-2.5 text-right font-semibold">{formatCurrency(t.amount)}</td>
-                <td className="px-3 py-2.5 text-muted-foreground">{t.description === "-" ? "" : t.description}</td>
+                <td className="px-3 py-2.5 text-right font-semibold">
+                  {formatCurrency(t.amount)}
+                </td>
+                <td className="px-3 py-2.5 text-muted-foreground">
+                  {t.description === "-" ? "" : t.description}
+                </td>
                 <td className="px-1 py-2.5 text-center">
                   <button
                     onClick={() => handleDelete(t.id)}
@@ -175,12 +206,16 @@ export function TransactionTable({ data, onDataChange }: Props) {
                 >
                   <option value="">Select category...</option>
                   {EXPENSE_CATEGORIES.map((cat) => {
-                    const cats = subCategories.filter((s) => s.primaryCategory === cat);
+                    const cats = subCategories.filter(
+                      (s) => s.primaryCategory === cat,
+                    );
                     if (!cats.length) return null;
                     return (
                       <optgroup key={cat} label={TABLE_LABELS[cat] || cat}>
                         {cats.map((s) => (
-                          <option key={s.id} value={s.id}>{s.name}</option>
+                          <option key={s.id} value={s.id}>
+                            {s.name}
+                          </option>
                         ))}
                       </optgroup>
                     );

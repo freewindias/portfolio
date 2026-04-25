@@ -30,11 +30,12 @@ const FeaturedWork = async () => {
               const isRightCol = index % 2 === 1;
               const isLastRow = index >= featureWork.length - (featureWork.length % 2 === 0 ? 2 : 1);
               const isLastItem = index === featureWork.length - 1;
+              const isOnlyOne = featureWork.length === 1;
 
               return (
                   <div
                     key={index}
-                    className={`group flex flex-col border-b border-border ${isRightCol ? "md:border-l md:border-border" : ""} ${isLastItem ? "border-b-0" : ""} ${isLastRow ? "md:border-b-0" : ""}`}
+                    className={`group flex flex-col border-b border-border ${isRightCol ? "" : "md:border-r md:border-border"} ${isLastItem && !isOnlyOne ? "border-b-0" : ""} ${isLastRow && !isOnlyOne ? "md:border-b-0" : ""}`}
                   >
                     <div className="p-3.5 sm:p-6">
                       <Link href={`/works/${value.slug}`} className="overflow-hidden block">
