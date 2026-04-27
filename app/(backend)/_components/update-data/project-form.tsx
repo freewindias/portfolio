@@ -14,6 +14,23 @@ import { Loader2, Upload, Trash2, GripVertical, CheckCircle2, ChevronLeft, Chevr
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 type GalleryItem = {
   id: string;
@@ -42,6 +59,13 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const additionalImagesInputRef = useRef<HTMLInputElement>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const {
     register,
@@ -176,13 +200,15 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     });
   };
 
-  const moveGalleryItem = (index: number, direction: 'up' | 'down') => {
-    const newItems = [...galleryItems];
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    
-    if (targetIndex >= 0 && targetIndex < newItems.length) {
-      [newItems[index], newItems[targetIndex]] = [newItems[targetIndex], newItems[index]];
-      setGalleryItems(newItems);
+  const onDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setGalleryItems((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
     }
   };
 
@@ -302,57 +328,32 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
           className="hidden" 
         />
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-          {galleryItems.map((item, index) => (
-            <div key={item.id} className={`relative group aspect-square rounded-md overflow-hidden border ${item.type === 'new' ? 'border-primary/50' : ''}`}>
-              <Image src={item.url} alt="Gallery" fill className="object-cover" unoptimized={item.type === 'existing'} />
-              
-              {item.type === 'new' && (
-                <div className="absolute top-2 left-2 bg-primary/80 text-white p-1 rounded">
-                  <span className="text-[10px] uppercase font-bold px-1">New</span>
-                </div>
-              )}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={onDragEnd}
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+            <SortableContext
+              items={galleryItems.map(item => item.id)}
+              strategy={rectSortingStrategy}
+            >
+              {galleryItems.map((item, index) => (
+                <SortableGalleryItem 
+                  key={item.id} 
+                  item={item} 
+                  onRemove={() => removeGalleryItem(item.id)} 
+                />
+              ))}
+            </SortableContext>
 
-              {/* Reorder Controls */}
-              <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="secondary"
-                  className="h-7 w-7 bg-background/80"
-                  onClick={() => moveGalleryItem(index, 'up')}
-                  disabled={index === 0}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="secondary"
-                  className="h-7 w-7 bg-background/80"
-                  onClick={() => moveGalleryItem(index, 'down')}
-                  disabled={index === galleryItems.length - 1}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+            {galleryItems.length === 0 && (
+              <div className="col-span-full py-8 text-center text-muted-foreground border-2 border-dashed rounded-md bg-muted/20">
+                No gallery images uploaded yet.
               </div>
-
-              <button
-                type="button"
-                onClick={() => removeGalleryItem(item.id)}
-                className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-
-          {galleryItems.length === 0 && (
-            <div className="col-span-full py-8 text-center text-muted-foreground border-2 border-dashed rounded-md bg-muted/20">
-              No gallery images uploaded yet.
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </DndContext>
       </div>
 
       <div className="flex items-center justify-between pt-8 border-t">
@@ -389,5 +390,66 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
         </div>
       </div>
     </form>
+  );
+}
+
+function SortableGalleryItem({ item, onRemove }: { item: GalleryItem; onRemove: () => void }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : 0,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`relative group aspect-square rounded-md overflow-hidden border ${
+        item.type === "new" ? "border-primary/50" : ""
+      } ${isDragging ? "opacity-50" : ""}`}
+    >
+      <Image
+        src={item.url}
+        alt="Gallery"
+        fill
+        className="object-cover"
+        unoptimized={item.type === "existing"}
+      />
+
+      {item.type === "new" && (
+        <div className="absolute top-2 left-2 bg-primary/80 text-white p-1 rounded pointer-events-none">
+          <span className="text-[10px] uppercase font-bold px-1">New</span>
+        </div>
+      )}
+
+      {/* Drag Overlay */}
+      <div 
+        {...attributes} 
+        {...listeners}
+        className="absolute inset-0 cursor-grab active:cursor-grabbing flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20"
+      >
+        <GripVertical className="text-white drop-shadow-md" />
+      </div>
+
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
+        className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity z-10"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+    </div>
   );
 }

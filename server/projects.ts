@@ -2,7 +2,7 @@
 
 import { db } from "@/db/drizzle";
 import { project } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, asc, inArray } from "drizzle-orm";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { revalidatePath } from "next/cache";
@@ -31,7 +31,7 @@ async function saveFile(file: File, subDir: string) {
 export async function getProjects() {
   try {
     const projects = await db.query.project.findMany({
-      orderBy: [desc(project.createdAt)],
+      orderBy: [asc(project.order), desc(project.createdAt)],
     });
     return projects;
   } catch (error) {
@@ -73,6 +73,24 @@ export async function deleteProject(id: string) {
   } catch (error) {
     console.error("Error deleting project:", error);
     return { success: false, message: "Failed to delete project" };
+  }
+}
+
+export async function updateProjectsOrder(projectIds: string[]) {
+  try {
+    // Update each project's order based on its index in the array
+    await Promise.all(
+      projectIds.map((id, index) =>
+        db.update(project).set({ order: index }).where(eq(project.id, id))
+      )
+    );
+
+    revalidatePath("/(frontend)/works", "layout");
+    revalidatePath("/dashboard/update/projects");
+    return { success: true, message: "Project order updated successfully" };
+  } catch (error) {
+    console.error("Error updating projects order:", error);
+    return { success: false, message: "Failed to update projects order" };
   }
 }
 
@@ -175,6 +193,12 @@ export async function saveProject(formData: FormData) {
         })
         .where(eq(project.id, id));
     } else {
+      // Get max order to put the new project at the end
+      const allProjects = await getProjects();
+      const maxOrder = allProjects.length > 0 
+        ? Math.max(...allProjects.map(p => p.order)) 
+        : -1;
+
       await db.insert(project).values({
         id: crypto.randomUUID(),
         slug,
@@ -187,6 +211,7 @@ export async function saveProject(formData: FormData) {
         image: imageUrl,
         additionalImages,
         featured,
+        order: maxOrder + 1,
       });
     }
 

@@ -121,6 +121,7 @@ export const project = pgTable("project", {
   image: text("image"),
   additionalImages: jsonb("additional_images").$type<string[]>(),
   featured: boolean("featured").default(false).notNull(),
+  order: integer("order").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -136,6 +137,20 @@ export const experience = pgTable("experience", {
   startYear: text("start_year").notNull(),
   endYear: text("end_year").notNull(),
   bulletPoints: jsonb("bullet_points").$type<string[]>().default([]).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const certificate = pgTable("certificate", {
+  id: text("id").primaryKey(),
+  date: text("date").notNull(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  link: text("link"),
+  order: integer("order").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -243,4 +258,5 @@ export const schema = {
   budgetSubCategoryRelations,
   transactionRelations,
   note,
+  certificate,
 };

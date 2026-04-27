@@ -4,6 +4,7 @@ import AboutMe from './sections/about'
 import FeaturedWork from './sections/featuredwork'
 import Experience from './sections/experience'
 import Education from './sections/education'
+import Certificates from './sections/certificates'
 import Divider from './_components/divider'
 import { getHeroData } from '@/server/hero'
 
@@ -22,6 +23,8 @@ export default async function Home() {
       <Experience/>
       <Divider/>
       <Education/>
+      <Divider/>
+      <Certificates/>
       <Divider/>
     </>
   )

@@ -45,6 +45,10 @@ const data = {
           title: "Projects Section",
           url: "/dashboard/update/projects",
         },
+        {
+          title: "Certificates Section",
+          url: "/dashboard/update/certificates",
+        },
       ],
     },
     {
