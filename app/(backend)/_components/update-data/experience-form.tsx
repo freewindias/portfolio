@@ -167,6 +167,7 @@ export function ExperienceForm({ initialData }: ExperienceFormProps) {
               src={iconPreview} 
               alt="Icon preview" 
               fill 
+              sizes="96px"
               className="object-contain p-2" 
               unoptimized
             />

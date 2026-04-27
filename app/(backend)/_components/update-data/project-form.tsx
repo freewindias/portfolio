@@ -289,6 +289,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
               src={imagePreview} 
               alt="Cover image preview" 
               fill 
+              sizes="(max-width: 768px) 100vw, 800px"
               className="object-cover" 
               unoptimized
             />
@@ -421,6 +422,7 @@ function SortableGalleryItem({ item, onRemove }: { item: GalleryItem; onRemove: 
         src={item.url}
         alt="Gallery"
         fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         className="object-cover"
         unoptimized={item.type === "existing"}
       />

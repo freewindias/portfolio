@@ -40,15 +40,14 @@ const HeroSection = ({ heroData }: { heroData: any }) => {
     <section>
       <div className="container">
         <div className="">
-          <div className="w-full h-72">
+          <div className="w-full h-72 relative">
             <Image
               src={bannerUrl}
               alt="banner-img"
-              width={1080}
-              height={267}
+              fill
               priority
-              loading="eager"
-              className="w-full h-full object-cover border-x border-border"
+              sizes="100vw"
+              className="object-cover border-x border-border"
             />
           </div>
           <div className="border-x border-border">
@@ -60,6 +59,7 @@ const HeroSection = ({ heroData }: { heroData: any }) => {
                   width={145}
                   height={145}
                   className="border-4 border-white rounded-full bg-white"
+                  priority
                 />
                 <span className="absolute bottom-2.5 right-5 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
               </div>

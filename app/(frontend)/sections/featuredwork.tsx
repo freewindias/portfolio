@@ -38,13 +38,13 @@ const FeaturedWork = async () => {
                     className={`group flex flex-col border-b border-border ${isRightCol ? "" : "md:border-r md:border-border"} ${isLastItem && !isOnlyOne ? "border-b-0" : ""} ${isLastRow && !isOnlyOne ? "md:border-b-0" : ""}`}
                   >
                     <div className="p-3.5 sm:p-6">
-                      <Link href={`/works/${value.slug}`} className="overflow-hidden block">
+                      <Link href={`/works/${value.slug}`} className="overflow-hidden block relative h-[300px] sm:h-[490px]">
                         <Image
                           src={value.image}
                           alt="Image"
-                          width={390}
-                          height={490}
-                          className="w-full h-[490px] object-contain group-hover:scale-105 transition-all duration-300 ease-in-out"
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-contain group-hover:scale-105 transition-all duration-300 ease-in-out"
                         />
                       </Link>
                     </div>

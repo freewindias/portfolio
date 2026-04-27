@@ -177,6 +177,7 @@ function SortableProjectRow({ project }: { project: Project }) {
                 src={project.image}
                 alt={project.title}
                 fill
+                sizes="64px"
                 className="object-cover"
                 unoptimized
               />

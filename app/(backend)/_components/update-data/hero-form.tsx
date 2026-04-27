@@ -139,6 +139,7 @@ export function HeroForm({ initialData }: HeroFormProps) {
                 src={bannerPreview} 
                 alt="Banner preview" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 800px"
                 className="object-cover" 
                 unoptimized // In case it's a data URL
               />
@@ -175,6 +176,7 @@ export function HeroForm({ initialData }: HeroFormProps) {
                   src={profilePreview} 
                   alt="Profile preview" 
                   fill 
+                  sizes="128px"
                   className="object-cover"
                   unoptimized 
                 />

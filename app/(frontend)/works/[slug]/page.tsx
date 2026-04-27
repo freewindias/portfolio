@@ -47,13 +47,13 @@ const ProjectDetailPage = async ({ params }: ProjectDetailPageProps) => {
             </div>
 
             {/* Main Image */}
-            <div className="border-t border-border overflow-hidden block">
+            <div className="border-t border-border overflow-hidden block relative h-[400px] sm:h-[600px]">
               <Image
                 src={project.image || "/images/placeholder.png"}
                 alt={project.title}
-                width={600}
-                height={600}
-                className="w-full h-[600px] object-contain"
+                fill
+                sizes="100vw"
+                className="object-contain"
                 priority
               />
             </div>

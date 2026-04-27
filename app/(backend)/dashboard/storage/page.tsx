@@ -66,6 +66,7 @@ export default function StoragePage() {
                 src={item.url}
                 alt={item.label}
                 fill
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             )}
@@ -76,6 +77,7 @@ export default function StoragePage() {
                 size="icon"
                 className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-black border-none"
                 render={<a href={item.url} target="_blank" rel="noopener noreferrer" />}
+                nativeButton={false}
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>

@@ -123,6 +123,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
                 src={images[currentIndex]}
                 alt={`${title} - Gallery Detail`}
                 fill
+                sizes="100vw"
                 className="object-contain animate-in zoom-in-95 duration-500"
                 priority
               />
