@@ -59,7 +59,7 @@ export function ProjectGallery({ images, title }: ProjectGalleryProps) {
               className={`overflow-hidden border-border cursor-pointer group ${isRightCol ? "md:border-l" : ""} ${!isLastRow ? "border-b" : ""}`}
               onClick={() => openLightbox(index)}
             >
-              <div className="relative aspect-[600/400] overflow-hidden">
+              <div className="relative aspect-600/400 overflow-hidden">
                 <Image
                   src={image}
                   alt={`${title} - ${index + 1}`}

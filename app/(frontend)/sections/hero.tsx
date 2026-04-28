@@ -3,6 +3,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { FiMail, FiDownload, FiMapPin } from "react-icons/fi";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const HeroSection = ({ heroData }: { heroData: any }) => {
   const name = heroData?.name || "Freewin Dias";
@@ -10,9 +16,10 @@ const HeroSection = ({ heroData }: { heroData: any }) => {
   const location = heroData?.location || "Vancouver, BC";
   const bannerUrl = heroData?.bannerUrl || "/images/hero-sec/banner-bg-img.png";
   const profileUrl = heroData?.profileUrl || "/images/hero-sec/user-img.png";
-  
+
   const mailEmail = heroData?.mailEmail || "mailto:[EMAIL_ADDRESS]";
-  const linkedinUrl = heroData?.linkedinUrl || "https://linkedin.com/in/freewindias";
+  const linkedinUrl =
+    heroData?.linkedinUrl || "https://linkedin.com/in/freewindias";
   const githubUrl = heroData?.githubUrl || "https://github.com/freewindias";
   const resumeUrl = heroData?.resumeUrl || "/resume.pdf";
 
@@ -53,21 +60,37 @@ const HeroSection = ({ heroData }: { heroData: any }) => {
           <div className="border-x border-border">
             <div className="relative flex flex-col xs:flex-row items-center xs:items-start justify-center xs:justify-between max-w-3xl mx-auto gap-10 xs:gap-3 px-4 sm:px-7 pt-22 pb-8 sm:pb-12">
               <div className="absolute top-0 transform -translate-y-1/2">
-                <Image
-                  src={profileUrl}
-                  alt="user-img"
-                  width={145}
-                  height={145}
-                  className="border-4 border-white rounded-full bg-white"
-                  priority
-                />
-                <span className="absolute bottom-2.5 right-5 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                <Dialog>
+                  <DialogTrigger className="relative cursor-pointer transition-transform hover:scale-105 outline-none border-none bg-transparent p-0 block">
+                    <Image
+                      src={profileUrl}
+                      alt="user-img"
+                      width={145}
+                      height={145}
+                      className="border-4 border-white rounded-full bg-white"
+                      priority
+                    />
+                    <span className="absolute bottom-2.5 right-5 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl border-none bg-transparent shadow-none p-0 flex justify-center [&>button]:text-white [&>button]:bg-black/50 [&>button]:rounded-full [&>button]:p-2 [&>button]:right-0 [&>button]:-top-12 sm:[&>button]:-right-12 sm:[&>button]:top-0">
+                    <DialogTitle className="sr-only">
+                      Profile Picture
+                    </DialogTitle>
+                    <div className="relative w-full max-w-md aspect-square border-none">
+                      <Image
+                        src={profileUrl}
+                        alt="user-img-full"
+                        fill
+                        className="object-contain rounded-full shadow-2xl"
+                        priority
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               <div className="flex flex-col gap-2 sm:gap-3 items-center text-center xs:items-start">
                 <h1>{name}</h1>
-                <p className="text-violet-700 font-normal">
-                  {role}
-                </p>
+                <p className="text-violet-700 font-normal">{role}</p>
                 <div className="flex items-center gap-2">
                   <FiMapPin size={20} />
                   <p className="text-primary">{location}</p>
@@ -81,7 +104,11 @@ const HeroSection = ({ heroData }: { heroData: any }) => {
                         href={value?.href}
                         key={index}
                         target={value.target}
-                        rel={value.target === "_blank" ? "noopener noreferrer" : undefined}
+                        rel={
+                          value.target === "_blank"
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
                         className="w-fit p-2.5 sm:p-3.5 hover:bg-primary/5 border border-border rounded-full transition-colors"
                         title={value.name}
                       >
