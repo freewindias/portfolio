@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getProjectBySlug } from "@/server/projects";
 import { Button } from "@/components/ui/button";
 import Divider from "../../_components/divider";
-import { ProjectGallery } from "@/components/project/project-gallery";
+import { ProjectGallery } from "@/app/(frontend)/_components/project/project-gallery";
 
 
 interface ProjectDetailPageProps {
