@@ -13,6 +13,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         // We restrict uploads to images
         return {
           allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
+          maximumSizeInBytes: 100 * 1024 * 1024, // 100MB limit
           // We can optionally add a token payload, useful if we needed to pass auth context
           tokenPayload: JSON.stringify({
             // example: userId: user.id
