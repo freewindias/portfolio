@@ -43,6 +43,8 @@ interface ProjectFormProps {
   initialData?: any;
 }
 
+import { upload } from "@vercel/blob/client";
+
 export function ProjectForm({ initialData }: ProjectFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -105,27 +107,31 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
       if (values.website) formData.append("website", values.website);
       formData.append("featured", String(values.featured));
       formData.append("existingImage", initialData?.image || "");
-      if (values.image) {
+      
+      if (values.image instanceof File) {
+        const blob = await upload(values.image.name, values.image, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+        });
+        formData.append("image", blob.url);
+      } else if (values.image && typeof values.image === 'string') {
         formData.append("image", values.image);
       }
       
-      const orderedGallery = galleryItems.map((item, index) => {
+      const finalGalleryUrls: string[] = [];
+      for (const item of galleryItems) {
         if (item.type === 'existing') {
-          return { type: 'existing', url: item.url };
-        } else {
-          return { type: 'new', index }; // reference to the file we'll append
+          finalGalleryUrls.push(item.url);
+        } else if (item.type === 'new' && item.file) {
+          const blob = await upload(item.file.name, item.file, {
+            access: 'public',
+            handleUploadUrl: '/api/upload',
+          });
+          finalGalleryUrls.push(blob.url);
         }
-      });
+      }
       
-      formData.append("galleryOrder", JSON.stringify(orderedGallery));
-
-      const newFiles = galleryItems.filter(item => item.type === 'new' && item.file);
-      formData.append("additionalImagesCount", newFiles.length.toString());
-      newFiles.forEach((item, index) => {
-        if (item.file) {
-          formData.append(`additionalImage_${index}`, item.file);
-        }
-      });
+      formData.append("additionalImages", JSON.stringify(finalGalleryUrls));
 
       const result = await saveProject(formData);
 

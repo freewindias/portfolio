@@ -109,8 +109,16 @@ export async function saveProject(formData: FormData) {
     let imageUrl = formData.get("existingImage") as string || null;
     let additionalImages: string[] = [];
     const galleryOrderStr = formData.get("galleryOrder") as string;
+    const directAdditionalImagesStr = formData.get("additionalImages") as string;
     
-    if (galleryOrderStr) {
+    // Check if client uploaded files directly and sent us the URLs
+    if (directAdditionalImagesStr) {
+      try {
+        additionalImages = JSON.parse(directAdditionalImagesStr);
+      } catch (e) {
+        console.error("Error parsing direct additional images:", e);
+      }
+    } else if (galleryOrderStr) {
       try {
         const galleryOrder = JSON.parse(galleryOrderStr);
         const newFiles: string[] = [];
@@ -161,9 +169,11 @@ export async function saveProject(formData: FormData) {
       }
     }
 
-    const imageFile = formData.get("image") as File | null;
-    if (imageFile && imageFile.size > 0) {
-      imageUrl = await saveFile(imageFile, "projects");
+    const imageValue = formData.get("image");
+    if (imageValue instanceof File && imageValue.size > 0) {
+      imageUrl = await saveFile(imageValue, "projects");
+    } else if (typeof imageValue === "string" && imageValue.trim() !== "") {
+      imageUrl = imageValue;
     }
 
     if (featured) {
