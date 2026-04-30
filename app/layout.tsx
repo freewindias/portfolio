@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "sonner";
 import ReactLenis from "lenis/react";
-
-// import Preloader from "@/components/preloader";
 import Footer from "./sections/footer";
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Freewin Dias | Portfolio",
@@ -20,12 +19,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <ReactLenis root>
         <body className="antialiased">
-          {/* <Preloader /> */}
-          <main>
-            {children}
-            <Footer />
-          </main>
-          <Toaster richColors />
+          {children}
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
         </body>
       </ReactLenis>
     </html>

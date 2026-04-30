@@ -11,23 +11,23 @@ import {
 } from "@/components/ui/dialog";
 
 const HeroSection = ({ heroData }: { heroData: any }) => {
-  const name = heroData?.name || "Freewin Dias";
-  const role = heroData?.role || "Game & Web Developer";
-  const location = heroData?.location || "Vancouver, BC";
-  const bannerUrl = heroData?.bannerUrl || "/images/hero-sec/banner-bg-img.png";
-  const profileUrl = heroData?.profileUrl || "/images/hero-sec/user-img.png";
+  const name = heroData?.name;
+  const role = heroData?.role;
+  const location = heroData?.location;
+  const bannerUrl = heroData?.bannerUrl;
+  const profileUrl = heroData?.profileUrl;
 
-  const mailEmail = heroData?.mailEmail || "mailto:[EMAIL_ADDRESS]";
-  const linkedinUrl =
-    heroData?.linkedinUrl || "https://linkedin.com/in/freewindias";
-  const githubUrl = heroData?.githubUrl || "https://github.com/freewindias";
-  const resumeUrl = heroData?.resumeUrl || "/resume.pdf";
+  const mailEmail = heroData?.mailEmail;
+  const linkedinUrl = heroData?.linkedinUrl;
+  const githubUrl = heroData?.githubUrl;
+  const resumeUrl = heroData?.resumeUrl;
 
   const socialIcons = [
     {
       icon: <FiMail size={20} />,
-      href: mailEmail.startsWith("mailto:") ? mailEmail : `mailto:${mailEmail}`,
+      href: `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(mailEmail)}&su=${encodeURIComponent("Connect with Freewin Dias")}`,
       name: "Mail",
+      target: "_blank",
     },
     {
       icon: <FaLinkedinIn size={20} />,
