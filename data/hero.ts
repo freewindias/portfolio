@@ -7,6 +7,6 @@ export const heroData = {
   location: "Vancouver, BC",
   githubUrl: "https://github.com/freewindias",
   linkedinUrl: "https://linkedin.com/in/freewindias",
-  mailEmail: "[EMAIL_ADDRESS]",
+  mailEmail: "diasfreewin6@gmail.com",
   resumeUrl: "/resume.pdf",
 };
