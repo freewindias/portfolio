@@ -25,8 +25,9 @@ export const projectsData: Project[] = [
     website: "https://www.freewindias.me/",
     image: "/PortfolioWebsiteImages/projectMainIMG/logo.jpeg",
     additionalImages: [
-      "/PortfolioWebsiteImages/projectMainIMG/logo.jpeg",
-      "/PortfolioWebsiteImages/projectMainIMG/logo.jpeg",
+      "/PortfolioWebsiteImages/projectScreenshots/Freewin/home.jpg",
+      "/PortfolioWebsiteImages/projectScreenshots/Freewin/works.jpg",
+      "/PortfolioWebsiteImages/projectScreenshots/Freewin/projectOverview.jpg",
     ],
     featured: true,
     order: 0,
